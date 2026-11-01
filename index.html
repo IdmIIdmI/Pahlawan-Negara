@@ -82,75 +82,170 @@ background:linear-gradient(#80d7ed 0 43%,#70b94f 43% 68%,#368447 68%)
 .missionCard,.adminList{background:#f0f7e9;color:#193b2b;border:2px solid #c9ddc5;border-radius:14px;padding:13px;margin:10px 0}
 .missionCard h3{color:#176b48;margin:0}
 
-/* PAPARAN CABARAN HIJAU */
+/* PAPARAN CABARAN DAN SEMUA AKSI MISI 1-8 */
 #challenge{
-background:linear-gradient(160deg,#123d32,#176b48);
-border:3px solid #ffda72;border-radius:18px;padding:14px;
-text-align:center;margin:12px 0;min-height:260px;color:#fff
+background:linear-gradient(160deg,#123d32,#176b48)!important;
+border:3px solid #ffda72;
+border-radius:18px;
+padding:14px;
+text-align:center;
+margin:12px 0;
+min-height:260px;
+color:#fff!important;
 }
-#challenge p,
-#challenge h1,
-#challenge h2,
-#challenge h3,
-#challenge label,
-#challenge span{
-color:#fff;
-text-shadow:1px 2px 3px #09291e;
-}
-.challengeTitle{
-font-size:24px;font-weight:1000;color:#fff;
-text-shadow:2px 3px 4px #09291e;
-}
-.challengeArea{
-background:linear-gradient(145deg,#176b48,#10432f);
-color:#fff;
-border:3px solid #e5c875;
-border-radius:15px;padding:14px;margin:12px 0;min-height:140px;
-font-weight:750;
-}
-.challengeArea p,
-.challengeArea h3,
-.challengeArea label,
-.challengeArea span{
-color:#fff;
+
+#challenge *:not(button):not(input){
+color:#fff!important;
 text-shadow:1px 2px 3px #09291e;
 }
 
-/* Butang kekal jelas dan tidak hilang tulisan */
-.challengeArea button{
-margin:5px;
+.challengeTitle{
+font-size:24px;
+font-weight:1000;
+color:#fff!important;
+text-shadow:2px 3px 4px #09291e;
+}
+
+.challengeArea{
+background:linear-gradient(145deg,#176b48,#10432f)!important;
+color:#fff!important;
+border:3px solid #e5c875;
+border-radius:15px;
+padding:14px;
+margin:12px 0;
+min-height:140px;
+font-weight:750;
+}
+
+.challengeArea *:not(button):not(input){
+color:#fff!important;
+text-shadow:1px 2px 3px #09291e;
+}
+
+/* Semua permainan dalam grid */
+.gameGrid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+margin:12px 0;
+background:linear-gradient(145deg,#176b48,#10432f);
+border:2px solid #e5c875;
+border-radius:14px;
+padding:10px;
+}
+
+.gameGrid button{
+min-height:65px;
+font-size:25px;
+padding:8px;
+color:#38280c!important;
+text-shadow:none!important;
+}
+
+/* Aksi mengelak batu */
+#dodgeArena{
+position:relative;
+height:300px;
+overflow:hidden;
+border:4px solid #ffd45e;
+border-radius:15px;
+background:linear-gradient(#176b48 0 45%,#10432f 45% 100%)!important;
+touch-action:pan-y;
+}
+
+#dodgeArena *{
+color:#fff;
+}
+
+.dodgeLane{
+position:absolute;
+top:0;
+bottom:0;
+width:33.333%;
+border-right:2px dashed #ffffff88;
+}
+
+.dodgeLane:nth-child(2){left:33.333%}
+.dodgeLane:nth-child(3){left:66.666%;border:0}
+
+#dodgeHero{
+position:absolute;
+bottom:8px;
+left:50%;
+transform:translateX(-50%);
+font-size:52px;
+z-index:3;
+transition:left .12s;
+}
+
+.rock{
+position:absolute;
+top:-55px;
+font-size:43px;
+z-index:4;
+filter:drop-shadow(2px 4px 3px #222);
+}
+
+/* Butang kawalan */
+.dodgeControls{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:7px;
+margin-top:10px;
+background:#10432f;
+border-radius:12px;
+padding:8px;
+}
+
+.dodgeControls button{
+font-size:16px;
+padding:14px 5px;
+color:#38280c!important;
+}
+
+/* Butang dalam aksi */
+#challenge button{
 color:#38280c;
 text-shadow:none;
 }
-.challengeArea button.secondary{
-color:#fff;
+
+#challenge button.secondary{
+color:#fff!important;
 text-shadow:1px 1px 2px #09291e;
 }
-.challengeArea input{
-color:#173b29;
-background:#fff;
+
+#challenge input{
+color:#173b29!important;
+background:#fff!important;
 }
+
+#challenge .progressBar{
+background:#d9e4d8;
+}
+
+#challenge .progressBar div{
+background:#ffd45e;
+}
+
 .bigEmoji{font-size:65px}
-.gameGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
-.gameGrid button{min-height:65px;font-size:25px;padding:8px}
-.progressBar{height:14px;background:#ddd;border-radius:20px;overflow:hidden;margin:10px 0}
-.progressBar div{height:100%;background:#ffd45e;width:0%;transition:width .2s}
-#dodgeArena{
-position:relative;height:300px;overflow:hidden;border:4px solid #b9d99a;
-border-radius:15px;background:linear-gradient(#82c9e9 0 45%,#75a94e 45% 100%);
-touch-action:pan-y
+
+.soundButton{
+background:linear-gradient(135deg,#ffe27b,#ffb72e);
+color:#38280c;
 }
-.dodgeLane{position:absolute;top:0;bottom:0;width:33.333%;border-right:2px dashed #ffffff88}
-.dodgeLane:nth-child(2){left:33.333%}
-.dodgeLane:nth-child(3){left:66.666%;border:0}
-#dodgeHero{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:52px;z-index:3;transition:left .12s}
-.rock{position:absolute;top:-55px;font-size:43px;z-index:4;filter:drop-shadow(2px 4px 3px #222)}
-.dodgeControls{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
-.dodgeControls button{font-size:16px;padding:14px 5px}
-.soundButton{background:linear-gradient(135deg,#ffe27b,#ffb72e);color:#38280c}
-@keyframes bob{50%{transform:translateY(-10px)}}
+
+@keyframes bob{
+50%{transform:translateY(-10px)}
+}
+
 .bob{animation:bob 1s infinite}
-@keyframes rockShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+@keyframes rockShake{
+0%,100%{transform:translateX(0)}
+25%{transform:translateX(-5px)}
+75%{transform:translateX(5px)}
+}
+
 @media(max-width:420px){
 .screen{padding:10px}
 #world{min-height:350px}
