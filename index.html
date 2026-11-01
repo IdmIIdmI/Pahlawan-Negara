@@ -81,20 +81,55 @@ background:linear-gradient(#80d7ed 0 43%,#70b94f 43% 68%,#368447 68%)
 .option.selected{background:#ffe18b}
 .missionCard,.adminList{background:#f0f7e9;color:#193b2b;border:2px solid #c9ddc5;border-radius:14px;padding:13px;margin:10px 0}
 .missionCard h3{color:#176b48;margin:0}
+
+/* PAPARAN CABARAN HIJAU */
 #challenge{
 background:linear-gradient(160deg,#123d32,#176b48);
 border:3px solid #ffda72;border-radius:18px;padding:14px;
 text-align:center;margin:12px 0;min-height:260px;color:#fff
 }
-.challengeTitle{font-size:24px;font-weight:1000;color:#ffe17b;text-shadow:0 2px 3px #182c20}
-.challengeArea{
-background:#fff9e9;color:#173b29;border:3px solid #e5c875;
-border-radius:15px;padding:14px;margin:12px 0;min-height:140px;
-font-weight:650
+#challenge p,
+#challenge h1,
+#challenge h2,
+#challenge h3,
+#challenge label,
+#challenge span{
+color:#fff;
+text-shadow:1px 2px 3px #09291e;
 }
-.challengeArea p,.challengeArea h3{color:#173b29}
-.challengeArea button{margin:5px}
-.challengeArea .secondary{color:#fff}
+.challengeTitle{
+font-size:24px;font-weight:1000;color:#fff;
+text-shadow:2px 3px 4px #09291e;
+}
+.challengeArea{
+background:linear-gradient(145deg,#176b48,#10432f);
+color:#fff;
+border:3px solid #e5c875;
+border-radius:15px;padding:14px;margin:12px 0;min-height:140px;
+font-weight:750;
+}
+.challengeArea p,
+.challengeArea h3,
+.challengeArea label,
+.challengeArea span{
+color:#fff;
+text-shadow:1px 2px 3px #09291e;
+}
+
+/* Butang kekal jelas dan tidak hilang tulisan */
+.challengeArea button{
+margin:5px;
+color:#38280c;
+text-shadow:none;
+}
+.challengeArea button.secondary{
+color:#fff;
+text-shadow:1px 1px 2px #09291e;
+}
+.challengeArea input{
+color:#173b29;
+background:#fff;
+}
 .bigEmoji{font-size:65px}
 .gameGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
 .gameGrid button{min-height:65px;font-size:25px;padding:8px}
@@ -239,7 +274,7 @@ const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const bgMusic=document.getElementById("bgMusic");
 bgMusic.volume=.25;
 
-let audioCtx=null,sfxOn=true,sfxVolume=.95;
+let audioCtx=null,sfxOn=true,sfxVolume=1;
 
 function audioReady(){
 try{
@@ -251,6 +286,7 @@ audioCtx=new AC();
 if(audioCtx.state==="suspended")audioCtx.resume();
 }catch(e){}
 }
+
 function tone(freq,duration=.12,type="sine",volume=.25,endFreq=null,delay=0){
 if(!sfxOn)return;
 audioReady();if(!audioCtx)return;
@@ -259,11 +295,12 @@ const o=audioCtx.createOscillator(),g=audioCtx.createGain();
 o.type=type;o.frequency.setValueAtTime(freq,t);
 if(endFreq)o.frequency.exponentialRampToValueAtTime(Math.max(1,endFreq),t+duration);
 g.gain.setValueAtTime(.001,t);
-g.gain.exponentialRampToValueAtTime(Math.max(.002,volume*sfxVolume),t+.012);
+g.gain.exponentialRampToValueAtTime(Math.min(.8,Math.max(.002,volume*sfxVolume*1.5)),t+.012);
 g.gain.exponentialRampToValueAtTime(.001,t+duration);
 o.connect(g);g.connect(audioCtx.destination);
 o.start(t);o.stop(t+duration+.03);
 }
+
 function noise(duration=.12,volume=.2,filter=900){
 if(!sfxOn)return;
 audioReady();if(!audioCtx)return;
@@ -273,38 +310,41 @@ const data=buffer.getChannelData(0);
 for(let i=0;i<length;i++)data[i]=(Math.random()*2-1)*(1-i/length);
 const src=audioCtx.createBufferSource(),f=audioCtx.createBiquadFilter(),g=audioCtx.createGain();
 src.buffer=buffer;f.type="lowpass";f.frequency.value=filter;
-g.gain.setValueAtTime(volume*sfxVolume,audioCtx.currentTime);
+g.gain.setValueAtTime(Math.min(.8,volume*sfxVolume*1.5),audioCtx.currentTime);
 g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);
 src.connect(f);f.connect(g);g.connect(audioCtx.destination);
 src.start();src.stop(audioCtx.currentTime+duration);
 }
+
 function playSfx(name){
 if(!sfxOn)return;
 switch(name){
-case"step":tone(180,.07,"triangle",.12,120);break;
-case"jump":tone(260,.12,"triangle",.28,620);tone(620,.1,"sine",.15,420,.1);break;
-case"rock":noise(.23,.42,1200);tone(160,.25,"sawtooth",.23,65);break;
-case"hit":noise(.35,.55,650);tone(100,.35,"sawtooth",.35,45);break;
-case"success":tone(523,.15,"sine",.3,660);tone(659,.16,"sine",.3,784,.14);tone(784,.3,"sine",.35,1046,.29);break;
-case"fail":tone(330,.18,"triangle",.3,240);tone(220,.28,"triangle",.28,130,.18);break;
-case"pearl":tone(880,.1,"sine",.25,1100);tone(1175,.22,"sine",.28,1500,.12);break;
-case"feed":tone(240,.1,"triangle",.2,360);noise(.13,.13,1600);break;
-case"arrow":noise(.16,.32,2600);tone(700,.14,"triangle",.2,220);break;
-case"target":tone(950,.09,"square",.2,700);tone(1250,.14,"sine",.2,1500,.09);break;
-case"puzzle":tone(480,.12,"sine",.22,720);break;
-case"find":tone(660,.12,"sine",.2,990);break;
-case"water":noise(.25,.3,1500);tone(180,.22,"sine",.18,110);break;
-case"boat":noise(.16,.22,1000);tone(130,.13,"triangle",.16,190);break;
-case"click":tone(420,.055,"sine",.12,360);break;
-case"win":tone(523,.18,"sine",.3,659);tone(659,.18,"sine",.3,784,.17);tone(784,.35,"sine",.34,1046,.34);tone(1046,.4,"sine",.3,1318,.52);break;
+case"step":tone(180,.07,"triangle",.18,120);break;
+case"jump":tone(260,.12,"triangle",.38,620);tone(620,.1,"sine",.22,420,.1);break;
+case"rock":noise(.23,.55,1200);tone(160,.25,"sawtooth",.3,65);break;
+case"hit":noise(.35,.65,650);tone(100,.35,"sawtooth",.45,45);break;
+case"success":tone(523,.15,"sine",.4,660);tone(659,.16,"sine",.4,784,.14);tone(784,.3,"sine",.45,1046,.29);break;
+case"fail":tone(330,.18,"triangle",.4,240);tone(220,.28,"triangle",.38,130,.18);break;
+case"pearl":tone(880,.1,"sine",.35,1100);tone(1175,.22,"sine",.38,1500,.12);break;
+case"feed":tone(240,.1,"triangle",.3,360);noise(.13,.2,1600);break;
+case"arrow":noise(.16,.4,2600);tone(700,.14,"triangle",.3,220);break;
+case"target":tone(950,.09,"square",.3,700);tone(1250,.14,"sine",.3,1500,.09);break;
+case"puzzle":tone(480,.12,"sine",.3,720);break;
+case"find":tone(660,.12,"sine",.3,990);break;
+case"water":noise(.25,.4,1500);tone(180,.22,"sine",.25,110);break;
+case"boat":noise(.16,.3,1000);tone(130,.13,"triangle",.22,190);break;
+case"click":tone(420,.055,"sine",.18,360);break;
+case"win":tone(523,.18,"sine",.4,659);tone(659,.18,"sine",.4,784,.17);tone(784,.35,"sine",.45,1046,.34);tone(1046,.4,"sine",.4,1318,.52);break;
 }
 }
+
 function toggleSfx(){
 sfxOn=!sfxOn;
 let label=sfxOn?"🔊 KESAN BUNYI ON":"🔇 KESAN BUNYI OFF";
 document.querySelectorAll(".soundButton").forEach(b=>b.textContent=label);
 if(sfxOn){audioReady();playSfx("success")}
 }
+
 document.addEventListener("pointerdown",audioReady,{once:true});
 document.addEventListener("keydown",audioReady,{once:true});
 
@@ -320,12 +360,14 @@ const characters=[
 {id:"kucing",name:"Kucing",emoji:"🐱",color:"#e8a6a0"},
 {id:"arnab",name:"Arnab",emoji:"🐰",color:"#eee2d2"},
 {id:"kijang",name:"Kijang",emoji:"🦌",color:"#c18a54"}];
+
 const areas=[
 {name:"Kampung Damai",unlock:0,emoji:"🏡"},
 {name:"Hutan Rimba",unlock:2,emoji:"🌳"},
 {name:"Air Terjun",unlock:4,emoji:"💦"},
 {name:"Rumah Panjang",unlock:6,emoji:"🛖"},
 {name:"Gua Misteri",unlock:7,emoji:"⛰️"}];
+
 const missions=[
 {id:"m1",title:"Jiran yang Memerlukan",area:0,pillar:"Penyayang",question:"Kamu melihat jiran terjatuh ketika membawa barang. Apakah tindakan terbaik?",a:"Membantu jiran mengangkat barang",b:"Berpura-pura tidak nampak",c:"Mentertawakan jiran",answer:"A"},
 {id:"m2",title:"Sahabat Baharu",area:0,pillar:"Penyayang",question:"Seorang murid baharu duduk bersendirian. Apakah yang patut kamu lakukan?",a:"Mengejeknya",b:"Mengajaknya berkawan",c:"Menyuruhnya pulang",answer:"B"},
@@ -335,7 +377,9 @@ const missions=[
 {id:"m6",title:"Tugas Bersama",area:2,pillar:"Berupaya Memimpin",question:"Rakan tidak tahu tugasnya. Apakah tindakan kamu?",a:"Memarahinya",b:"Membiarkannya",c:"Menerangkan tugas dan membimbingnya",answer:"C"},
 {id:"m7",title:"Sungai Bersih",area:3,pillar:"Warganegara Aktif",question:"Kamu melihat sampah di tepi sungai. Apakah tindakan wajar?",a:"Mengutip sampah dengan selamat dan mengajak orang menjaga kebersihan",b:"Membuang lebih banyak sampah",c:"Membiarkannya sahaja",answer:"A"},
 {id:"m8",title:"Warisan Negara",area:4,pillar:"Warganegara Aktif",question:"Bagaimanakah kamu menghargai masyarakat dan budaya negara?",a:"Memperlekeh adat orang lain",b:"Menghormati kepelbagaian dan hidup bekerjasama",c:"Enggan mengenali masyarakat lain",answer:"B"}];
+
 const gameNames=["ELAK BALINGAN BATU","LOMPAT BATU KE BATU","BERI GAJAH MAKAN","MEMANAH SASARAN","SUSUN PUZZLE","CARI BARANG TERSEMBUNYI","LUMBA PERAHU","TEKA KOD RAHSIA"];
+
 const stories=[
 ["🇲🇾⭐","PANGGILAN NEGARA","Di sebuah negara yang kaya dengan kepelbagaian, alam dan budaya, seorang wira muda dipanggil untuk memulakan pengembaraan."],
 ["🏡🌳","LIMA WILAYAH","Lima kawasan menanti untuk diterokai. Setiap kawasan menyimpan cabaran dan pengajaran."],
