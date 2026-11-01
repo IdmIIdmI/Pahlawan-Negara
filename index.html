@@ -1,0 +1,733 @@
+
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#102d25">
+<title>Misi Pahlawan Alpha</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--dark:#102d25;--green:#176b48;--lime:#a7e66b;--gold:#ffd45e;--cream:#fff6df}
+*{box-sizing:border-box}
+body{margin:0;background:#10251f;color:white;font-family:system-ui,Arial;overflow-x:hidden}
+button,input{font:inherit}
+button{border:0;border-radius:13px;padding:12px;background:linear-gradient(135deg,#ffe27b,#ffb72e);color:#38280c;font-weight:900;box-shadow:0 4px #9b651c;cursor:pointer}
+button:active{transform:translateY(3px);box-shadow:none}
+button:disabled{opacity:.4}
+.secondary{background:#285c49;color:white;box-shadow:0 4px #143b2d}
+.danger{background:#d94b4b;color:white}
+input{width:100%;padding:12px;border-radius:10px;border:2px solid #b6d9bd;margin:6px 0 12px}
+.hidden{display:none!important}
+.screen{display:none;min-height:100dvh;padding:15px}
+.screen.active{display:flex;flex-direction:column}
+.center{align-items:center;justify-content:center;text-align:center}
+.logo{font-size:clamp(36px,9vw,65px);font-weight:1000;color:#ffe17b;text-shadow:0 5px #75451a;line-height:1.05}
+.subtitle{color:#d8f4d8;letter-spacing:2px;font-weight:900}
+.panel{background:#fff8e7;color:#263b2c;border-radius:22px;padding:18px;width:100%;max-width:540px;box-shadow:0 8px #0a2119}
+.panel h2{color:#176b48}
+.small{font-size:12px}
+footer{text-align:center;color:#c4dfc9;font-size:11px;padding:12px}
+.row{display:flex;gap:8px;align-items:center}
+.row>*{flex:1}
+.stat{background:#fff4cf;color:#4b3815;border-radius:12px;padding:9px;font-weight:900}
+.musicControl{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
+.musicControl input{width:100px}
+.characterGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.character{background:#e7f5df;color:#26452f;border:3px solid transparent;border-radius:15px;padding:10px}
+.character.selected{border-color:#e5a52d;background:#fff0b8}
+.animal{font-size:70px}
+.topbar,.actionbar{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap}
+#gameScreen{gap:9px}
+#world{position:relative;width:100%;height:min(55vh,550px);min-height:360px;border:5px solid #e6c77c;border-radius:22px;overflow:hidden;background:linear-gradient(#80d7ed 0 43%,#70b94f 43% 68%,#368447 68%)}
+.sun{position:absolute;right:9%;top:7%;width:60px;height:60px;background:#ffe77a;border-radius:50%;box-shadow:0 0 35px #ffe77a}
+.mountain{position:absolute;bottom:48%;left:5%;border-left:100px solid transparent;border-right:100px solid transparent;border-bottom:150px solid #599c78}
+.mountain.m2{left:48%;border-bottom-color:#458b6d}
+.tree{position:absolute;bottom:23%;width:18px;height:85px;background:#76502e}
+.tree:before{content:"";position:absolute;left:-35px;top:-60px;width:88px;height:95px;border-radius:50%;background:#176b48;box-shadow:20px 15px #27824b,-18px 20px #398f4e}
+.t1{left:9%}.t2{right:10%}
+.river{position:absolute;bottom:0;right:0;width:23%;height:35%;background:#36bddd;border-radius:60% 0 0}
+.locationLabel{position:absolute;top:10px;left:10px;background:#123c2dcc;padding:8px;border-radius:10px;font-weight:900;z-index:4}
+#hero{position:absolute;left:45%;bottom:22%;width:85px;height:135px;z-index:5;transition:left .2s,bottom .2s}
+.heroSvg{width:100%;height:100%}
+.npc{position:absolute;bottom:24%;font-size:45px;z-index:3}
+.n1{left:20%}.n2{right:20%}
+.collectible{position:absolute;left:70%;bottom:35%;font-size:30px}
+.areaButtons{display:flex;gap:7px;overflow-x:auto;padding:5px 0}
+.areaButtons button{white-space:nowrap}
+.actionbar button{flex:1;min-width:100px}
+.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;max-width:290px;margin:5px auto}
+.controls button{font-size:20px}
+.empty{visibility:hidden}
+#modal{position:fixed;inset:0;background:#000c;z-index:50;display:none;align-items:center;justify-content:center;padding:12px;overflow-y:auto}
+#modal .panel{max-height:95dvh;overflow-y:auto;margin:auto}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#122d24;padding:12px 20px;border-radius:20px;z-index:99;display:none;text-align:center;max-width:90%}
+.option{display:block;width:100%;margin:9px 0;text-align:left;background:#e5f3e6;box-shadow:0 3px #9ab99e;color:#183d2a}
+.option.selected{background:#ffe18b}
+.missionCard,.adminList{background:#edf5e9;color:#263b2c;border-radius:14px;padding:13px;margin:10px 0}
+.missionCard{border:2px solid #c9ddc5}
+.missionCard h3{color:#176b48;margin:0}
+#challenge{background:linear-gradient(160deg,#123d32,#176b48);border:3px solid #ffda72;border-radius:18px;padding:14px;text-align:center;margin:12px 0;min-height:260px}
+.challengeTitle{font-size:24px;font-weight:1000;color:#ffe17b}
+.challengeArea{background:#e9f7dc;color:#21442e;border-radius:15px;padding:12px;margin:12px 0;min-height:140px}
+.challengeArea button{margin:5px}
+.bigEmoji{font-size:65px}
+.gameGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.gameGrid button{min-height:65px;font-size:25px;padding:8px}
+.progressBar{height:14px;background:#ddd;border-radius:20px;overflow:hidden;margin:10px 0}
+.progressBar div{height:100%;background:#ffd45e;width:0%;transition:width .2s}
+.target{font-size:45px;padding:8px;display:inline-block}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes bob{50%{transform:translateY(-10px)}}
+.bob{animation:bob 1s infinite}
+@media(max-width:420px){.screen{padding:10px}#world{min-height:350px}.stat{font-size:12px;padding:7px}}
+</style>
+</head>
+<body>
+
+<audio id="bgMusic" src="https://idmiidmi.github.io/Misi-Pahlawan-Alpha/Naga%20Api%20Zabarjad.mp3" loop></audio>
+
+<section id="openingScreen" class="screen center">
+<div style="font-size:65px">🌴🦜🌺</div>
+<div class="logo">MISI<br>PAHLAWAN<br>ALPHA</div>
+<p class="subtitle">PENGEMBARAAN ILMU BORNEO</p>
+<p>Satu pengembaraan. Lima wilayah. Lapan cabaran!</p>
+<button onclick="beginStory()" style="width:240px">🎬 MULA PENGEMBARAAN</button>
+<div class="musicControl"><button class="secondary" onclick="toggleMusic()">🎵 MUZIK ON/OFF</button><input type="range" min="0" max="100" value="45" oninput="setMusicVolume(this.value)"></div>
+</section>
+
+<section id="authScreen" class="screen center active">
+<div class="panel">
+<div style="font-size:45px">🌴🦜🌺</div>
+<h2>🔐 Pintu Pengembaraan</h2>
+<p>Log masuk atau daftar akaun murid.</p>
+<label>Nama murid (pendaftaran sahaja)</label>
+<input id="fullName" placeholder="Nama penuh">
+<label>Emel</label>
+<input id="email" type="email" placeholder="Emel">
+<label>Kata laluan</label>
+<input id="password" type="password" placeholder="Minimum 6 aksara">
+<button style="width:100%" onclick="login()">LOG MASUK</button>
+<button class="secondary" style="width:100%;margin-top:12px" onclick="register()">DAFTAR AKAUN MURID</button>
+<p id="authMessage"></p>
+<footer>© MISI PAHLAWAN ALPHA</footer>
+</div>
+</section>
+
+<section id="storyScreen" class="screen center">
+<div class="logo">🌴 PANGGILAN BORNEO</div>
+<div class="panel">
+<div class="bigEmoji" id="storyEmoji">🦜</div>
+<h2 id="storyTitle">Pengembaraan Bermula</h2>
+<p id="storyText"></p>
+<button onclick="nextStory()" style="width:100%">SETERUSNYA ▶</button>
+<button class="secondary" onclick="goToLogin()" style="width:100%;margin-top:10px">LOG MASUK / DAFTAR</button>
+<button class="secondary" onclick="speakStory()" style="width:100%;margin-top:10px">🔊 BACA CERITA</button>
+</div>
+</section>
+
+<section id="characterScreen" class="screen center">
+<div class="panel">
+<h2>🐾 Pilih Wira Kamu</h2>
+<div class="characterGrid" id="characterGrid"></div>
+<button style="width:100%;margin-top:15px" onclick="confirmCharacter()">PILIH WATAK</button>
+<button class="secondary" style="width:100%;margin-top:10px" onclick="logout()">LOG KELUAR</button>
+</div>
+</section>
+
+<section id="introScreen" class="screen center">
+<div class="logo" style="font-size:38px">SELAMAT DATANG, WIRA!</div>
+<div class="panel" style="margin-top:15px">
+<h2 id="welcomeName">Pengembara</h2>
+<p>Terokai Borneo, bantu penduduk dan selesaikan lapan cabaran unik!</p>
+<div class="row"><div class="stat">💎 <span id="introPearls">0</span></div><div class="stat">🏅 <span id="introRank">Wira Baharu</span></div></div>
+<button style="width:100%;margin-top:15px" onclick="startGame()">🎮 MASUK DUNIA PERMAINAN</button>
+<button class="secondary" style="width:100%;margin-top:10px" onclick="showScreen('characterScreen')">🐾 TUKAR WATAK</button>
+<button class="secondary" style="width:100%;margin-top:10px" onclick="showLeaderboard()">🏆 PAPAN KEDUDUKAN</button>
+<button id="masterPanelButton" class="secondary hidden" style="width:100%;margin-top:10px" onclick="openMasterPanel()">👑 PANEL MASTER</button>
+<button class="secondary" style="width:100%;margin-top:10px" onclick="logout()">LOG KELUAR</button>
+</div>
+</section>
+
+<section id="gameScreen" class="screen">
+<div class="topbar">
+<div class="stat">💎 <span id="pearls">0</span></div>
+<div class="stat">⏱️ <span id="clock">15:00</span></div>
+<div class="stat">🏅 <span id="rank">Wira Baharu</span></div>
+</div>
+<div class="areaButtons" id="areaButtons"></div>
+<div id="world">
+<div class="sun"></div><div class="mountain"></div><div class="mountain m2"></div>
+<div class="tree t1"></div><div class="tree t2"></div><div class="river"></div>
+<div class="locationLabel" id="locationLabel">KAMPUNG DAMAI</div>
+<div class="npc n1" onclick="talkNPC(0)">🦜</div>
+<div class="npc n2" onclick="talkNPC(1)">🐒</div>
+<div class="collectible" onclick="collectPearl()">💎</div>
+<div id="hero"></div>
+</div>
+<div class="actionbar">
+<button onclick="interact()">⚔️ MULAKAN CABARAN</button>
+<button class="secondary" onclick="showMissionBook()">📖 BUKU MISI</button>
+<button class="secondary" onclick="showMap()">🗺️ PETA</button>
+<button class="secondary" onclick="backToIntro()">🏠 MENU</button>
+</div>
+<div class="controls">
+<span class="empty"></span><button class="secondary" onclick="move(0,-1)">⬆️</button><span class="empty"></span>
+<button class="secondary" onclick="move(-1,0)">⬅️</button><button class="secondary" onclick="interact()">⚔️</button><button class="secondary" onclick="move(1,0)">➡️</button>
+<span class="empty"></span><button class="secondary" onclick="move(0,1)">⬇️</button><span class="empty"></span>
+</div>
+<footer>MISI PAHLAWAN ALPHA · BORNEO</footer>
+</section>
+
+<section id="leaderScreen" class="screen center">
+<div class="panel"><h2>🏆 Papan Kedudukan</h2><div id="leaderList">Memuatkan...</div><button class="secondary" style="width:100%" onclick="showScreen('introScreen')">KEMBALI</button></div>
+</section>
+
+<section id="masterScreen" class="screen">
+<div class="panel" style="max-width:700px;margin:auto">
+<h2>👑 PANEL MASTER</h2>
+<div class="row"><button onclick="masterTab('missions')">📚 Misi</button><button onclick="masterTab('players')">👥 Pemain</button><button onclick="masterTab('scores')">🏆 Skor</button></div>
+<div id="masterContent"></div>
+<button class="secondary" style="width:100%;margin-top:12px" onclick="backToIntro()">KEMBALI</button>
+<button class="danger" style="width:100%;margin-top:10px" onclick="logout()">LOG KELUAR</button>
+</div>
+</section>
+
+<div id="modal"><div class="panel"><div id="modalContent"></div><button class="secondary" style="width:100%;margin-top:12px" onclick="closeModal()">TUTUP</button></div></div>
+<div id="toast"></div>
+
+<script>
+/* SUPABASE */
+const SUPABASE_URL="https://krijvnbpbmqqyquzzrxu.supabase.co";
+const SUPABASE_KEY="sb_publishable_NRa91_nx4Xc2PSvUoiCWWw_zgf3xJha";
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const bgMusic=document.getElementById("bgMusic");
+bgMusic.volume=.45;
+let musicOn=true;
+function toggleMusic(){musicOn=!musicOn;if(musicOn)bgMusic.play().catch(()=>{});else bgMusic.pause()}
+function setMusicVolume(v){bgMusic.volume=Math.max(0,Math.min(1,Number(v)/100))}
+function stopVoice(){if("speechSynthesis"in window)speechSynthesis.cancel()}
+function speakText(t){
+if(!("speechSynthesis"in window))return;
+stopVoice();let u=new SpeechSynthesisUtterance(t);u.lang="ms-MY";u.rate=.9;
+let v=speechSynthesis.getVoices().find(x=>x.lang.toLowerCase().startsWith("ms"));if(v)u.voice=v;
+speechSynthesis.speak(u)
+}
+function toast(t){let e=document.getElementById("toast");e.textContent=t;e.style.display="block";setTimeout(()=>e.style.display="none",2500)}
+function escapeHTML(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+const characters=[
+{id:"hamster",name:"Hamster",emoji:"🐹",color:"#d99b55"},
+{id:"tupai",name:"Tupai",emoji:"🐿️",color:"#ad7040"},
+{id:"kucing",name:"Kucing",emoji:"🐱",color:"#e8a6a0"},
+{id:"arnab",name:"Arnab",emoji:"🐰",color:"#eee2d2"},
+{id:"kijang",name:"Kijang",emoji:"🦌",color:"#c18a54"}
+];
+const areas=[
+{name:"Kampung Damai",unlock:0,emoji:"🏡"},
+{name:"Hutan Rimba",unlock:2,emoji:"🌳"},
+{name:"Air Terjun",unlock:4,emoji:"💦"},
+{name:"Rumah Panjang",unlock:6,emoji:"🛖"},
+{name:"Gua Misteri",unlock:7,emoji:"⛰️"}
+];
+const missions=[
+{id:"m1",title:"Jiran yang Memerlukan",area:0,pillar:"Penyayang",question:"Kamu melihat jiran terjatuh ketika membawa barang. Apakah tindakan terbaik?",a:"Membantu jiran mengangkat barang",b:"Berpura-pura tidak nampak",c:"Mentertawakan jiran",answer:"A"},
+{id:"m2",title:"Sahabat Baharu",area:0,pillar:"Penyayang",question:"Seorang murid baharu duduk bersendirian. Apakah yang patut kamu lakukan?",a:"Mengejeknya",b:"Mengajaknya berkawan",c:"Menyuruhnya pulang",answer:"B"},
+{id:"m3",title:"Jambatan Rosak",area:1,pillar:"Berdaya Tahan",question:"Jambatan kecil rosak. Apakah tindakan kamu?",a:"Terus melompat tanpa berfikir",b:"Berputus asa",c:"Mencari laluan selamat dan meminta bantuan",answer:"C"},
+{id:"m4",title:"Cabaran Hujan",area:1,pillar:"Berdaya Tahan",question:"Hujan lebat menyebabkan aktiviti tergendala. Apakah sikap terbaik?",a:"Bertenang dan menyusun rancangan baharu",b:"Marah kepada semua orang",c:"Menyalahkan orang lain",answer:"A"},
+{id:"m5",title:"Ketua Pasukan",area:2,pillar:"Berupaya Memimpin",question:"Pasukan tidak sependapat. Apakah tindakan pemimpin yang baik?",a:"Memaksa semua ikut kehendaknya",b:"Mendengar pandangan dan mencari persetujuan",c:"Meninggalkan pasukan",answer:"B"},
+{id:"m6",title:"Tugas Bersama",area:2,pillar:"Berupaya Memimpin",question:"Rakan tidak tahu tugasnya. Apakah tindakan kamu?",a:"Memarahinya",b:"Membiarkannya",c:"Menerangkan tugas dan membimbingnya",answer:"C"},
+{id:"m7",title:"Sungai Bersih",area:3,pillar:"Warganegara Aktif",question:"Kamu melihat sampah di tepi sungai. Apakah tindakan wajar?",a:"Mengutip sampah dengan selamat dan mengajak orang menjaga kebersihan",b:"Membuang lebih banyak sampah",c:"Membiarkannya sahaja",answer:"A"},
+{id:"m8",title:"Warisan Borneo",area:4,pillar:"Warganegara Aktif",question:"Bagaimanakah kamu menghargai masyarakat dan budaya Borneo?",a:"Memperlekeh adat orang lain",b:"Menghormati kepelbagaian dan hidup bekerjasama",c:"Enggan mengenali masyarakat lain",answer:"B"}
+];
+const gameNames=[
+"ELAK BALINGAN BATU","LOMPAT BATU KE BATU","BERI GAJAH MAKAN",
+"MEMANAH SASARAN","SUSUN PUZZLE","CARI BARANG TERSEMBUNYI",
+"LUMBA PERAHU","TEKA KOD RAHSIA"
+];
+
+let user=null,profile=null,isMaster=false,selectedCharacter="hamster";
+let progress={},balance=0,currentArea=0,remainingSeconds=900,timer=null;
+let heroX=45,heroY=22,currentMission=null,selectedAnswer=null;
+let pearlTaken=false,authBusy=false,challengeStep=0,challengeData={};
+let storyIndex=0;
+
+function requireLogin(){if(!user){showScreen("authScreen");return false}return true}
+function attempted(id){return !!progress[id]?.attempted}
+function attemptedCount(){return Object.keys(progress).filter(k=>progress[k]?.attempted).length}
+function areaUnlocked(i){return isMaster||attemptedCount()>=areas[i].unlock}
+function localKey(){return "mpa_"+user.id}
+function rankName(){return balance>=500?"Legenda Borneo":balance>=250?"Pahlawan Hebat":balance>=100?"Wira Berani":"Wira Baharu"}
+function updateStats(){
+["pearls","introPearls"].forEach(id=>{let e=document.getElementById(id);if(e)e.textContent=balance});
+["rank","introRank"].forEach(id=>{let e=document.getElementById(id);if(e)e.textContent=rankName()})
+}
+function showScreen(id){
+if(!user&&["gameScreen","introScreen","characterScreen","leaderScreen","masterScreen"].includes(id))id="authScreen";
+stopVoice();document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+document.getElementById(id)?.classList.add("active");window.scrollTo(0,0)
+}
+function showModal(html){
+if(!requireLogin())return;
+stopVoice();document.getElementById("modalContent").innerHTML=html;
+document.getElementById("modal").style.display="flex"
+}
+function closeModal(){stopVoice();document.getElementById("modal").style.display="none"}
+
+const stories=[
+["🌴🦜","PANGGILAN BORNEO","Di sebuah bumi yang kaya dengan hutan, sungai dan kehidupan, pengembaraan seorang wira akan bermula."],
+["🏡🌳","LIMA WILAYAH","Kampung Damai, Hutan Rimba, Air Terjun, Rumah Panjang dan Gua Misteri menanti untuk diterokai."],
+["🐹🐿️🐱","PILIH SAHABAT","Pilih sahabat haiwan yang akan menemani perjalananmu."],
+["💎🏆","LAPAN CABARAN","Setiap misi mempunyai permainan yang berlainan. Buktikan keberanian dan kebijaksanaanmu!"],
+["🦸🌟","PENGEMBARAAN BERMULA","Bantu penduduk, selesaikan cabaran dan kumpulkan Mutiara."]
+];
+function beginStory(){storyIndex=0;showStory();showScreen("storyScreen");bgMusic.play().catch(()=>{})}
+function showStory(){document.getElementById("storyEmoji").textContent=stories[storyIndex][0];document.getElementById("storyTitle").textContent=stories[storyIndex][1];document.getElementById("storyText").textContent=stories[storyIndex][2]}
+function nextStory(){if(++storyIndex>=stories.length){goToLogin();return}showStory();speakStory()}
+function speakStory(){speakText(stories[storyIndex][2])}
+function goToLogin(){showScreen("authScreen")}
+
+function heroGraphic(){
+let c=characters.find(x=>x.id===selectedCharacter)||characters[0];
+let ears=c.id==="arnab"?`<ellipse cx="35" cy="15" rx="11" ry="27" fill="${c.color}"/><ellipse cx="65" cy="15" rx="11" ry="27" fill="${c.color}"/>`:`<path d="M20 35 L24 8 L45 28 M55 28 L76 8 L80 35" fill="${c.color}" stroke="#704a30" stroke-width="3"/>`;
+if(c.id==="kijang")ears+=`<path d="M40 24 L28 0 M60 24 L72 0" stroke="#80522e" stroke-width="5"/>`;
+return `<svg class="heroSvg" viewBox="0 0 100 150"><ellipse cx="50" cy="137" rx="29" ry="8" fill="#173d2a" opacity=".4"/>${ears}<ellipse cx="50" cy="105" rx="27" ry="32" fill="${c.color}" stroke="#704a30" stroke-width="3"/><ellipse cx="50" cy="55" rx="35" ry="34" fill="${c.color}" stroke="#704a30" stroke-width="3"/><ellipse cx="38" cy="52" rx="5" ry="7"/><ellipse cx="62" cy="52" rx="5" ry="7"/><ellipse cx="50" cy="67" rx="8" ry="5" fill="#8d5147"/><path d="M43 77 Q50 85 57 77" fill="none" stroke="#5d392e" stroke-width="2"/><path d="M32 127 L29 145 M68 127 L71 145" stroke="${c.color}" stroke-width="10" stroke-linecap="round"/><path d="M25 96 Q8 85 12 70" stroke="${c.color}" stroke-width="9" fill="none" stroke-linecap="round"/></svg>`
+}
+function renderCharacterPicker(){
+document.getElementById("characterGrid").innerHTML=characters.map(c=>`<button class="character ${selectedCharacter===c.id?"selected":""}" onclick="chooseCharacter('${c.id}')"><div class="animal">${c.emoji}</div>${c.name}</button>`).join("")
+}
+function chooseCharacter(id){selectedCharacter=id;renderCharacterPicker()}
+async function confirmCharacter(){
+await saveCharacter();document.getElementById("hero").innerHTML=heroGraphic();
+document.getElementById("welcomeName").textContent="Wira "+selectedCharacter;
+showScreen("introScreen")
+}
+function renderAreas(){
+document.getElementById("areaButtons").innerHTML=areas.map((a,i)=>`<button class="${i===currentArea?"":"secondary"}" onclick="travelTo(${i})">${a.emoji} ${a.name} ${areaUnlocked(i)?"":"🔒"}</button>`).join("")
+}
+function renderWorld(){
+document.getElementById("locationLabel").textContent=areas[currentArea].name.toUpperCase();
+let h=document.getElementById("hero");h.style.left=heroX+"%";h.style.bottom=heroY+"%";h.innerHTML=heroGraphic();renderAreas()
+}
+function travelTo(i){if(!areaUnlocked(i)){toast("Selesaikan misi terdahulu untuk membuka kawasan ini.");return}currentArea=i;heroX=45;heroY=22;renderWorld()}
+function move(x,y){heroX=Math.max(5,Math.min(85,heroX+x*5));heroY=Math.max(10,Math.min(45,heroY+y*4));let h=document.getElementById("hero");h.style.left=heroX+"%";h.style.bottom=heroY+"%"}
+function talkNPC(i){let t=i===0?"Burung kenyalang: Teruskan membantu penduduk!":"Monyet: Setiap cabaran mengajar kita sesuatu!";toast(t);speakText(t)}
+function collectPearl(){if(pearlTaken){toast("Mutiara sudah dikutip.");return}pearlTaken=true;balance+=5;updateStats();saveLocal();toast("+5 Mutiara bonus!")}
+
+function availableMissions(){return missions.filter(m=>m.area===currentArea&&(isMaster||!attempted(m.id)))}
+function interact(){
+if(!requireLogin())return;
+if(remainingSeconds<=0&&!isMaster){toast("Masa permainan tamat.");return}
+let m=availableMissions()[0];
+if(!m){showMissionBook();return}
+startChallenge(m)
+}
+function showMissionBook(){
+let html=missions.map((m,i)=>{
+let locked=!areaUnlocked(m.area),done=attempted(m.id);
+return `<div class="missionCard"><h3>${i+1}. ${escapeHTML(m.title)}</h3><p>${escapeHTML(m.question)}</p><p>🎮 ${gameNames[i]}</p><p>${locked?"🔒 Kawasan terkunci":done?"✅ Selesai":"🟢 Tersedia"}</p><button ${locked||(done&&!isMaster)?"disabled":""} onclick="startChallengeById('${m.id}')">${done?"ULANG MISI":"MULA CABARAN"}</button></div>`
+}).join("");
+showModal(`<h2>📖 BUKU MISI</h2><p>Setiap misi mempunyai cabaran unik.</p>${html}`)
+}
+function startChallengeById(id){let m=missions.find(x=>x.id===id);if(!m)return;if(!areaUnlocked(m.area))return;closeModal();currentArea=m.area;renderWorld();startChallenge(m)}
+function startChallenge(m){
+currentMission=m;challengeStep=0;challengeData={};selectedAnswer=null;
+showModal(`<h2>🎮 MISI ${missions.indexOf(m)+1}: ${escapeHTML(m.title)}</h2><div id="challenge"></div>`);
+renderChallenge()
+}
+function challengeFrame(title,description,content,progressText){
+let c=document.getElementById("challenge");if(!c)return;
+c.innerHTML=`<div class="challengeTitle">${title}</div><p>${description}</p><div class="progressBar"><div style="width:${challengeStep/10*100}%"></div></div><p>⭐ Kemajuan: ${progressText}</p><div class="challengeArea">${content}</div>`
+}
+function completeChallenge(){
+toast("🏆 CABARAN BERJAYA! Bintang Emas diperoleh!");
+challengeData.won=true;
+setTimeout(()=>openMissionQuestion(),700)
+}
+
+/* 1: ELAK 10 BATU */
+function gameDodge(){
+challengeStep=challengeData.count||0;
+let pos=challengeData.position||1;
+challengeFrame("🪨 ELAK BALINGAN BATU","Batu sedang dibaling! Tekan kiri atau kanan untuk mengelak. Elak 10 kali.",`
+<div class="bigEmoji">🪨</div>
+<p>Balingan ke-${challengeStep+1} / 10</p>
+<p>Wira berada di lorong ${pos===0?"KIRI":pos===1?"TENGAH":"KANAN"}</p>
+<button onclick="dodgeMove(-1)">⬅️ KIRI</button>
+<button onclick="dodgeMove(1)">KANAN ➡️</button>
+<button class="secondary" onclick="dodgeMove(0)">⬆️ LOMPAT</button>`,
+challengeStep+"/10")
+}
+function dodgeMove(direction){
+let attack=challengeData.attack||0;
+let pos=challengeData.position??1;
+let hazard=attack%3;
+let safe=direction===0?Math.random()>.5:Math.max(0,Math.min(2,pos+direction));
+if(direction!==0)pos=safe;
+if(pos===hazard){challengeData.count=0;challengeData.position=1;challengeData.attack=0;toast("💥 Terkena batu! Cuba semula.");}
+else{challengeData.count=(challengeData.count||0)+1;challengeData.position=pos;challengeData.attack=attack+1}
+challengeStep=challengeData.count;
+if(challengeStep>=10)completeChallenge();else gameDodge()
+}
+
+/* 2: LOMPAT 10 BATU DAN PADANAN */
+function gameJump(){
+challengeFrame("🪨 LOMPAT BATU","Lompat dari batu ke batu sehingga sampai ke peti harta. Buat 10 lompatan.",`
+<div class="bigEmoji">🏃</div><p>BATU ${challengeStep+1} → BATU ${challengeStep+2}</p>
+<button style="font-size:28px" onclick="jumpStep()">⬆️ LOMPAT!</button>
+<div style="font-size:35px">🪨　🪨　🪨　🪨</div>`,
+challengeStep+"/10")
+}
+function jumpStep(){challengeStep++;if(challengeStep>=10){challengeData.jumpDone=true;challengeFrame("🎁 PETI DITEMUI!","Cari pasangan gambar yang sama.",pairGameHTML(),"10/10");initPairs()}else gameJump()}
+function pairGameHTML(){return `<p>Suaikan gambar dengan pasangan yang sama.</p><div id="pairs" class="gameGrid"></div>`}
+function initPairs(){
+let icons=["🌺","🐟","🌴","🐟","🌴","🌺"];
+challengeData.pairs=icons.sort(()=>Math.random()-.5);challengeData.pairSelected=[];challengeData.pairFound=[];
+drawPairs()
+}
+function drawPairs(){
+let box=document.getElementById("pairs");if(!box)return;
+box.innerHTML=challengeData.pairs.map((v,i)=>`<button onclick="selectPair(${i})">${challengeData.pairFound.includes(i)?v:challengeData.pairSelected.includes(i)?v:"❔"}</button>`).join("")
+}
+function selectPair(i){
+if(challengeData.pairFound.includes(i)||challengeData.pairSelected.includes(i))return;
+challengeData.pairSelected.push(i);
+if(challengeData.pairSelected.length===2){
+let [a,b]=challengeData.pairSelected;
+if(challengeData.pairs[a]===challengeData.pairs[b]){
+challengeData.pairFound.push(a,b);toast("Padanan tepat!")
+}else toast("Belum sepadan. Cuba lagi.");
+challengeData.pairSelected=[];
+drawPairs();
+if(challengeData.pairFound.length===6)setTimeout(openMissionQuestion,600)
+}else drawPairs()
+}
+
+/* 3: GAJAH MAKAN DAN MUTIARA BIRU */
+function gameElephant(){
+challengeFrame("🐘 BERI GAJAH MAKAN","Pilih tiga makanan yang sesuai untuk gajah. Selepas kenyang, gajah akan mengeluarkan Mutiara Biru.",`
+<div class="bigEmoji bob">🐘</div>
+<p>Gajah lapar! Pilih makanan.</p>
+<div class="gameGrid">
+<button onclick="feedElephant('🍌')">🍌</button>
+<button onclick="feedElephant('🥕')">🥕</button>
+<button onclick="feedElephant('🍃')">🍃</button>
+<button onclick="feedElephant('🍭')">🍭</button>
+<button onclick="feedElephant('🍕')">🍕</button>
+<button onclick="feedElephant('🍬')">🍬</button>
+</div><p id="feedCount">Makanan: 0/3</p>`,
+(challengeData.feeds||0)+"/3")
+}
+function feedElephant(food){
+if(["🍌","🥕","🍃"].includes(food)){
+challengeData.feeds=(challengeData.feeds||0)+1;toast("🐘 Gajah suka makanan ini!");
+}else{challengeData.feeds=0;toast("Makanan tidak sesuai. Cuba lagi!")}
+if(challengeData.feeds>=3){
+challengeFrame("💙 MUTIARA BIRU!","Gajah memberikan hadiah. Sentuh mutiara untuk mengambilnya.",`<div class="bigEmoji bob">🐘</div><button style="font-size:45px" onclick="takeBluePearl()">💎</button><p>Ambil Mutiara Biru!</p>`,"3/3")
+}else gameElephant()
+}
+function takeBluePearl(){toast("💙 Mutiara Biru diperoleh!");openMissionQuestion()}
+
+/* 4: MEMANAH SASARAN */
+function gameArchery(){
+challengeFrame("🏹 MEMANAH SASARAN","Tekan sasaran yang bergerak. Kena 5 kali untuk berjaya.",`
+<div class="bigEmoji">🏹</div>
+<div class="gameGrid">
+<button onclick="shootTarget(0)">🎯</button>
+<button onclick="shootTarget(1)">🎯</button>
+<button onclick="shootTarget(2)">🎯</button>
+</div><p>Tekan sasaran yang betul!</p>`,
+challengeStep+"/5")
+}
+function shootTarget(i){
+let target=challengeData.target??1;
+if(i===target){challengeStep++;toast("🎯 Tepat!");challengeData.target=(target+1)%3}
+else{challengeStep=Math.max(0,challengeStep-1);toast("Anak panah tersasar!")}
+if(challengeStep>=5)completeChallenge();else gameArchery()
+}
+
+/* 5: SUSUN PUZZLE */
+function gamePuzzle(){
+let items=challengeData.puzzle||["🌴","🌺","🦜","🏡"];
+challengeFrame("🧩 SUSUN PUZZLE","Susun gambar mengikut urutan yang betul: 🌴 🌺 🦜 🏡",`
+<p>Tekan empat kepingan mengikut susunan.</p>
+<div class="gameGrid">${items.map((v,i)=>`<button onclick="choosePuzzle(${i})">${v}</button>`).join("")}</div>
+<p>Susunan dipilih: ${(challengeData.chosen||[]).map(x=>items[x]).join(" ")}</p>`,
+(challengeData.chosen||[]).length+"/4")
+}
+function choosePuzzle(i){
+let items=challengeData.puzzle||["🌴","🌺","🦜","🏡"];
+challengeData.chosen=challengeData.chosen||[];
+if(challengeData.chosen.includes(i))return;
+challengeData.chosen.push(i);
+if(challengeData.chosen.length===4){
+if(challengeData.chosen.every((x,j)=>items[x]===["🌴","🌺","🦜","🏡"][j]))completeChallenge();
+else{toast("Puzzle belum tepat. Cuba lagi.");challengeData.chosen=[];gamePuzzle()}
+}else gamePuzzle()
+}
+
+/* 6: CARI BARANG TERSEMBUNYI */
+function gameHidden(){
+let found=challengeData.found||[];
+challengeFrame("🔍 CARI BARANG TERSEMBUNYI","Cari lima objek yang tersembunyi di dalam hutan.",`
+<p>Sentuh objek yang dicari:</p>
+<div class="gameGrid">
+${["🍄","🌺","🪶","🍃","🪵","🐚","🦋","🌰","🍀"].map((v,i)=>`<button onclick="findObject(${i})">${found.includes(i)?"✅":v}</button>`).join("")}
+</div>
+<p>Barang dijumpai: ${found.length}/5</p>`,
+found.length+"/5")
+}
+function findObject(i){
+let found=challengeData.found||[];
+if(!found.includes(i)){found.push(i);challengeData.found=found;toast("Objek dijumpai!")}
+if(found.length>=5)completeChallenge();else gameHidden()
+}
+
+/* 7: LUMBA PERAHU */
+function gameBoat(){
+challengeFrame("🚣 LUMBA PERAHU","Gerakkan perahu ke kiri dan kanan. Kumpulkan 5 bintang dan elak batu sungai.",`
+<div class="bigEmoji">🚣</div>
+<p>Halangan di hadapan!</p>
+<button onclick="boatMove(-1)">⬅️</button>
+<button onclick="boatMove(1)">➡️</button>
+<button class="secondary" onclick="boatMove(0)">TERUS</button>
+<p>⭐ ${challengeData.stars||0}/5</p>`,
+(challengeData.stars||0)+"/5")
+}
+function boatMove(dir){
+let lane=challengeData.lane??1;
+let hazard=challengeData.boatTurn%3;
+lane=Math.max(0,Math.min(2,lane+dir));
+challengeData.lane=lane;
+challengeData.boatTurn=(challengeData.boatTurn||0)+1;
+if(lane===hazard){challengeData.stars=0;toast("🚣 Terlanggar batu! Cuba semula.")}
+else{challengeData.stars=(challengeData.stars||0)+1;toast("⭐ Bintang sungai diperoleh!")}
+if(challengeData.stars>=5)completeChallenge();else gameBoat()
+}
+
+/* 8: TEKA KOD RAHSIA */
+function gameCode(){
+let clues=["Saya berwarna hijau dan tumbuh di hutan.","Saya hidup di sungai dan boleh berenang.","Saya mempunyai sayap dan boleh terbang."];
+let answers=["🌴","🐟","🦜"];
+let n=challengeData.codeIndex||0;
+challengeFrame("🔐 TEKA KOD RAHSIA","Selesaikan tiga petunjuk untuk membuka pintu gua.",`
+<div class="bigEmoji">🗝️</div>
+<h3>Petunjuk ${n+1}/3</h3><p>${clues[n]}</p>
+<div class="gameGrid">${["🌴","🐟","🦜"].map(v=>`<button onclick="answerCode('${v}')">${v}</button>`).join("")}</div>`,
+n+"/3")
+}
+function answerCode(v){
+let n=challengeData.codeIndex||0;
+let answers=["🌴","🐟","🦜"];
+if(v===answers[n]){
+challengeData.codeIndex=n+1;toast("🔓 Kod betul!");
+if(challengeData.codeIndex===3)completeChallenge();else gameCode()
+}else toast("Kod salah. Cuba lagi!")
+}
+
+/* PILIH JENIS CABARAN */
+function renderChallenge(){
+let n=missions.indexOf(currentMission);
+challengeStep=0;challengeData={};
+if(n===0)gameDodge();
+if(n===1)gameJump();
+if(n===2)gameElephant();
+if(n===3)gameArchery();
+if(n===4)gamePuzzle();
+if(n===5)gameHidden();
+if(n===6)gameBoat();
+if(n===7)gameCode()
+}
+
+/* SOALAN ILMU SELEPAS CABARAN */
+function openMissionQuestion(){
+if(!currentMission)return;
+selectedAnswer=null;
+let m=currentMission;
+showModal(`<h2>⭐ BINTANG EMAS DIPEROLEH!</h2>
+<p>Cabaran berjaya diselesaikan. Sekarang jawab soalan ilmu.</p>
+<h3>${escapeHTML(m.title)}</h3>
+<p>${escapeHTML(m.question)}</p>
+${["A","B","C"].map(k=>`<button class="option" id="opt${k}" onclick="selectOption('${k}')">${k}. ${escapeHTML(m[k.toLowerCase()])}</button>`).join("")}
+<button style="width:100%;margin-top:12px" onclick="speakQuestion()">🔊 DENGAR SOALAN</button>
+<button style="width:100%;margin-top:12px" onclick="submitAnswer()">HANTAR JAWAPAN</button>`)
+}
+function selectOption(k){
+selectedAnswer=k;
+["A","B","C"].forEach(x=>document.getElementById("opt"+x)?.classList.toggle("selected",x===k));
+}
+function speakQuestion(){
+let m=currentMission;speakText(m.question+". Pilihan A. "+m.a+". Pilihan B. "+m.b+". Pilihan C. "+m.c)
+}
+async function submitAnswer(){
+if(!selectedAnswer){toast("Pilih jawapan dahulu.");return}
+let m=currentMission,correct=selectedAnswer===m.answer,reward=correct?20:-3;
+balance=Math.max(0,balance+reward);
+progress[m.id]={attempted:true,correct,answer:selectedAnswer};
+updateStats();saveLocal();
+showModal(`<h2>${correct?"🎉 TAHNIAH!":"💪 CUBA LAGI!"}</h2>
+<p>${correct?"Jawapan tepat!":"Jawapan belum tepat."}</p>
+<div class="bigEmoji">${correct?"🏆":"⭐"}</div>
+<h2 style="text-align:center">${correct?"+20":"−3"} Mutiara</h2>
+<p>Jumlah Mutiara: <b>${balance}</b></p>
+<button style="width:100%" onclick="closeModal();renderWorld()">TERUSKAN</button>`);
+speakText(correct?"Tahniah! Kamu mendapat dua puluh Mutiara.":"Jawapan belum tepat. Tiga Mutiara ditolak.");
+await saveProgressToCloud(m,selectedAnswer,correct,reward)
+}
+
+/* PETA */
+function showMap(){showModal(`<h2>🗺️ PETA BORNEO</h2>${areas.map((a,i)=>`<button class="option" onclick="closeModal();travelTo(${i})">${a.emoji} ${a.name} ${areaUnlocked(i)?"🔓":"🔒"}</button>`).join("")}`)}
+function startGame(){
+showScreen("gameScreen");renderWorld();updateStats();if(!isMaster)startTimer();else document.getElementById("clock").textContent="∞"
+}
+function startTimer(){
+clearInterval(timer);
+timer=setInterval(()=>{
+if(remainingSeconds>0)remainingSeconds--;
+document.getElementById("clock").textContent=String(Math.floor(remainingSeconds/60)).padStart(2,"0")+":"+String(remainingSeconds%60).padStart(2,"0");
+if(remainingSeconds<=0){clearInterval(timer);toast("Masa permainan tamat!")}
+},1000)
+}
+function backToIntro(){clearInterval(timer);showScreen("introScreen")}
+
+/* MASTER */
+function openMasterPanel(){if(!isMaster)return toast("Akses Master sahaja.");showScreen("masterScreen");masterTab("missions")}
+async function masterTab(tab){
+if(!isMaster)return;
+let box=document.getElementById("masterContent");box.innerHTML="Memuatkan...";
+if(tab==="missions"){
+box.innerHTML="<h3>📚 Lapan Cabaran</h3>"+missions.map((m,i)=>`<div class="adminList"><b>${i+1}. ${escapeHTML(m.title)}</b><p>${gameNames[i]}</p><button onclick="masterReplay('${m.id}')">ULANG MISI</button></div>`).join("")
+}else if(tab==="players"){
+let {data,error}=await db.from("profiles").select("*").limit(100);
+box.innerHTML="<h3>👥 Pemain</h3>"+(error?escapeHTML(error.message):(data||[]).map(p=>`<div class="adminList">${escapeHTML(p.full_name||p.email||p.id)} · ${escapeHTML(p.role||"student")}</div>`).join(""))
+}else await loadLeaderboard(box)
+}
+function masterReplay(id){let m=missions.find(x=>x.id===id);if(!m)return;currentArea=m.area;showScreen("gameScreen");renderWorld();startChallenge(m)}
+
+/* PAPAN KEDUDUKAN */
+async function loadLeaderboard(target){
+target.innerHTML="Memuatkan data...";
+try{
+let [pr,pg]=await Promise.all([
+db.from("profiles").select("*").limit(500),
+db.from("student_progress").select("*").limit(5000)
+]);
+if(pr.error||pg.error){target.innerHTML=escapeHTML(pr.error?.message||pg.error?.message);return}
+let scores={};
+(pg.data||[]).forEach(r=>{let id=String(r.user_id);scores[id]=Math.max(scores[id]||0,Number(r.xp)||0)});
+let students=(pr.data||[]).filter(p=>(p.role||"student").toLowerCase()==="student").map(p=>({name:p.full_name||p.username||p.email||"Murid",score:scores[String(p.id)]||0})).sort((a,b)=>b.score-a.score);
+target.innerHTML="<h3>🏆 Kedudukan Mutiara Murid</h3><p>Jumlah murid: "+students.length+"</p>"+students.map((p,i)=>`<div class="adminList"><b>${i+1}. ${escapeHTML(p.name)}</b><h2>💎 ${p.score} Mutiara</h2></div>`).join("")
+}catch(e){target.innerHTML=escapeHTML(e.message)}
+}
+async function showLeaderboard(){showScreen("leaderScreen");await loadLeaderboard(document.getElementById("leaderList"))}
+
+/* LOGIN DAN PENDAFTARAN */
+async function login(){
+if(authBusy)return;
+let email=document.getElementById("email").value.trim(),password=document.getElementById("password").value,msg=document.getElementById("authMessage");
+if(!email||!password){msg.textContent="Masukkan emel dan kata laluan.";return}
+authBusy=true;msg.textContent="Sedang log masuk...";
+try{
+let {data,error}=await db.auth.signInWithPassword({email,password});
+if(error)throw error;user=data.user;await loadUser()
+}catch(e){msg.textContent="Log masuk gagal: "+e.message}
+finally{authBusy=false}
+}
+async function register(){
+if(authBusy)return;
+let name=document.getElementById("fullName").value.trim(),email=document.getElementById("email").value.trim(),password=document.getElementById("password").value,msg=document.getElementById("authMessage");
+if(!name||!email||password.length<6){msg.textContent="Masukkan nama, emel dan kata laluan sekurang-kurangnya 6 aksara.";return}
+authBusy=true;msg.textContent="Mendaftarkan akaun...";
+try{
+let {data,error}=await db.auth.signUp({email,password,options:{data:{full_name:name}}});
+if(error)throw error;
+if(data.session&&data.user){user=data.user;await ensureProfile(name);await loadUser()}
+else msg.textContent="Pendaftaran berjaya. Sila sahkan emel kemudian log masuk."
+}catch(e){msg.textContent="Pendaftaran gagal: "+e.message}
+finally{authBusy=false}
+}
+async function ensureProfile(name=""){
+if(!user)return false;
+let {data,error}=await db.from("profiles").select("*").eq("id",user.id).maybeSingle();
+if(error){document.getElementById("authMessage").textContent=error.message;return false}
+if(data){profile=data;return true}
+let {data:created,error:e}=await db.from("profiles").insert({id:user.id,full_name:name||user.user_metadata?.full_name||user.email.split("@")[0],role:"student"}).select("*").single();
+if(e){document.getElementById("authMessage").textContent=e.message;return false}
+profile=created;return true
+}
+async function loadUser(){
+let ok=await ensureProfile();
+if(!ok){await db.auth.signOut();user=null;showScreen("authScreen");return}
+isMaster=String(profile.role||"").toLowerCase()==="master";
+selectedCharacter=profile.character||"hamster";
+document.getElementById("masterPanelButton").classList.toggle("hidden",!isMaster);
+await loadMissions();await loadProgress();updateStats();renderCharacterPicker();
+document.getElementById("welcomeName").textContent="Selamat datang, "+(profile.full_name||user.email);
+document.getElementById("hero").innerHTML=heroGraphic();
+showScreen(profile.character?"introScreen":"characterScreen")
+}
+
+/* LOAD MISI */
+async function loadMissions(){
+try{
+let {data,error}=await db.from("missions").select("*").order("week").order("day");
+if(error||!data?.length)return;
+data.forEach(r=>{
+let m=missions.find(x=>x.id===r.id);if(!m)return;
+Object.assign(m,{
+title:r.title||r.name||m.title,pillar:r.pillar||r.category||m.pillar,
+question:r.question||m.question,a:r.option_a||r.a||m.a,
+b:r.option_b||r.b||m.b,c:r.option_c||r.c||m.c,
+answer:String(r.correct_answer||r.answer||m.answer).toUpperCase()
+})
+})
+}catch(e){console.warn(e)}
+}
+
+/* LOAD DAN SIMPAN PROGRESS */
+async function loadProgress(){
+progress={};balance=0;
+let {data,error}=await db.from("student_progress").select("*").eq("user_id",user.id);
+if(!error)(data||[]).forEach(p=>{progress[String(p.mission_id)]={attempted:true,correct:!!p.is_correct};balance=Math.max(balance,Number(p.xp)||0)});
+try{
+let local=JSON.parse(localStorage.getItem(localKey())||"{}");
+balance=Math.max(balance,Number(local.balance)||0);progress={...local.progress,...progress};
+if(local.selectedCharacter&&!profile.character)selectedCharacter=local.selectedCharacter
+}catch(e){}
+}
+function saveLocal(){if(user)localStorage.setItem(localKey(),JSON.stringify({balance,progress,selectedCharacter}))}
+async function saveCharacter(){
+if(!user)return;
+let {error}=await db.from("profiles").update({character:selectedCharacter}).eq("id",user.id);
+if(error)console.warn(error.message)
+}
+async function saveProgressToCloud(m,answer,correct,reward){
+if(!user)return;
+let {error}=await db.rpc("submit_mission_answer",{p_mission_id:m.id,p_answer:answer});
+if(error){console.warn(error.message);toast("Semakan simpanan Supabase diperlukan.")}
+}
+async function logout(){
+clearInterval(timer);stopVoice();if(user)await db.auth.signOut();
+user=null;profile=null;isMaster=false;progress={};balance=0;
+document.getElementById("email").value="";
+document.getElementById("password").value="";
+document.getElementById("fullName").value="";
+document.getElementById("modal").style.display="none";
+showScreen("authScreen")
+}
+
+/* MULA APLIKASI */
+renderCharacterPicker();document.getElementById("hero").innerHTML=heroGraphic();renderAreas();updateStats();
+(async()=>{
+try{
+let {data}=await db.auth.getSession();
+if(data.session?.user){user=data.session.user;await loadUser()}
+}catch(e){console.error(e)}
+})();
+db.auth.onAuthStateChange((event,session)=>{
+if(event==="SIGNED_OUT"){user=null;profile=null;isMaster=false;clearInterval(timer);showScreen("authScreen")}
+});
+</script>
+</body>
+</html>
