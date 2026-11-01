@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ms">
 <head>
@@ -6,19 +7,13 @@
 <meta name="theme-color" content="#102d25">
 <title>PAHLAWAN NEGARA</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-:root{
---dark:#102d25;--green:#176b48;--lime:#a7e66b;
---gold:#ffd45e;--cream:#fff6df;
-}
+:root{--dark:#102d25;--green:#176b48;--lime:#a7e66b;--gold:#ffd45e;--cream:#fff6df}
 *{box-sizing:border-box}
 body{margin:0;background:#10251f;color:white;font-family:system-ui,Arial;overflow-x:hidden}
 button,input{font:inherit}
-button{
-border:0;border-radius:13px;padding:12px;
-background:linear-gradient(135deg,#ffe27b,#ffb72e);
-color:#38280c;font-weight:900;box-shadow:0 4px #9b651c;cursor:pointer
-}
+button{border:0;border-radius:13px;padding:12px;background:linear-gradient(135deg,#ffe27b,#ffb72e);color:#38280c;font-weight:900;box-shadow:0 4px #9b651c;cursor:pointer}
 button:active{transform:translateY(3px);box-shadow:none}
 button:disabled{opacity:.4}
 .secondary{background:linear-gradient(135deg,#287d58,#14543b);color:#fff;box-shadow:0 4px #092f20}
@@ -30,11 +25,7 @@ input{width:100%;padding:12px;border-radius:10px;border:2px solid #b6d9bd;margin
 .center{align-items:center;justify-content:center;text-align:center}
 .logo{font-size:clamp(36px,9vw,65px);font-weight:1000;color:#ffe17b;text-shadow:0 5px #75451a;line-height:1.05}
 .subtitle{color:#d8f4d8;letter-spacing:2px;font-weight:900}
-.panel{
-background:#fff9e9;color:#193b2b;border:3px solid #e6c77c;
-border-radius:22px;padding:18px;width:100%;max-width:540px;
-box-shadow:0 8px #0a2119
-}
+.panel{background:#fff9e9;color:#193b2b;border:3px solid #e6c77c;border-radius:22px;padding:18px;width:100%;max-width:540px;box-shadow:0 8px #0a2119}
 .panel h2{color:#125b3c}
 .panel p,.panel label{color:#263e30}
 .small{font-size:12px}
@@ -50,11 +41,7 @@ footer{text-align:center;color:#c4dfc9;font-size:11px;padding:12px}
 .animal{font-size:70px}
 .topbar,.actionbar{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap}
 #gameScreen{gap:9px}
-#world{
-position:relative;width:100%;height:min(55vh,550px);min-height:360px;
-border:5px solid #e6c77c;border-radius:22px;overflow:hidden;
-background:linear-gradient(#80d7ed 0 43%,#70b94f 43% 68%,#368447 68%)
-}
+#world{position:relative;width:100%;height:min(55vh,550px);min-height:360px;border:5px solid #e6c77c;border-radius:22px;overflow:hidden;background:linear-gradient(#80d7ed 0 43%,#70b94f 43% 68%,#368447 68%)}
 .sun{position:absolute;right:9%;top:7%;width:60px;height:60px;background:#ffe77a;border-radius:50%;box-shadow:0 0 35px #ffe77a}
 .mountain{position:absolute;bottom:48%;left:5%;border-left:100px solid transparent;border-right:100px solid transparent;border-bottom:150px solid #599c78}
 .mountain.m2{left:48%;border-bottom-color:#458b6d}
@@ -82,180 +69,63 @@ background:linear-gradient(#80d7ed 0 43%,#70b94f 43% 68%,#368447 68%)
 .missionCard,.adminList{background:#f0f7e9;color:#193b2b;border:2px solid #c9ddc5;border-radius:14px;padding:13px;margin:10px 0}
 .missionCard h3{color:#176b48;margin:0}
 
-/* PAPARAN CABARAN DAN SEMUA AKSI MISI 1-8 */
-#challenge{
-background:linear-gradient(160deg,#123d32,#176b48)!important;
-border:3px solid #ffda72;
-border-radius:18px;
-padding:14px;
-text-align:center;
-margin:12px 0;
-min-height:260px;
-color:#fff!important;
-}
-
-#challenge *:not(button):not(input){
-color:#fff!important;
-text-shadow:1px 2px 3px #09291e;
-}
-
-.challengeTitle{
-font-size:24px;
-font-weight:1000;
-color:#fff!important;
-text-shadow:2px 3px 4px #09291e;
-}
-
-.challengeArea{
-background:linear-gradient(145deg,#176b48,#10432f)!important;
-color:#fff!important;
-border:3px solid #e5c875;
-border-radius:15px;
-padding:14px;
-margin:12px 0;
-min-height:140px;
-font-weight:750;
-}
-
-.challengeArea *:not(button):not(input){
-color:#fff!important;
-text-shadow:1px 2px 3px #09291e;
-}
-
-/* Semua permainan dalam grid */
-.gameGrid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:8px;
-margin:12px 0;
-background:linear-gradient(145deg,#176b48,#10432f);
-border:2px solid #e5c875;
-border-radius:14px;
-padding:10px;
-}
-
-.gameGrid button{
-min-height:65px;
-font-size:25px;
-padding:8px;
-color:#38280c!important;
-text-shadow:none!important;
-}
-
-/* Aksi mengelak batu */
-#dodgeArena{
-position:relative;
-height:300px;
-overflow:hidden;
-border:4px solid #ffd45e;
-border-radius:15px;
-background:linear-gradient(#176b48 0 45%,#10432f 45% 100%)!important;
-touch-action:pan-y;
-}
-
-#dodgeArena *{
-color:#fff;
-}
-
-.dodgeLane{
-position:absolute;
-top:0;
-bottom:0;
-width:33.333%;
-border-right:2px dashed #ffffff88;
-}
-
+/* CABARAN */
+#challenge{background:linear-gradient(160deg,#123d32,#176b48)!important;border:3px solid #ffda72;border-radius:18px;padding:14px;text-align:center;margin:12px 0;min-height:260px;color:#fff!important}
+#challenge *:not(button):not(input){color:#fff!important;text-shadow:1px 2px 3px #09291e}
+.challengeTitle{font-size:24px;font-weight:1000;color:#fff!important;text-shadow:2px 3px 4px #09291e}
+.challengeArea{background:linear-gradient(145deg,#176b48,#10432f)!important;color:#fff!important;border:3px solid #e5c875;border-radius:15px;padding:14px;margin:12px 0;min-height:140px;font-weight:750}
+.challengeArea *:not(button):not(input){color:#fff!important;text-shadow:1px 2px 3px #09291e}
+.gameGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0;background:linear-gradient(145deg,#176b48,#10432f);border:2px solid #e5c875;border-radius:14px;padding:10px}
+.gameGrid button{min-height:65px;font-size:25px;padding:8px;color:#38280c!important;text-shadow:none!important}
+#dodgeArena{position:relative;height:300px;overflow:hidden;border:4px solid #ffd45e;border-radius:15px;background:linear-gradient(#176b48 0 45%,#10432f 45% 100%)!important;touch-action:pan-y}
+#dodgeArena *{color:#fff}
+.dodgeLane{position:absolute;top:0;bottom:0;width:33.333%;border-right:2px dashed #ffffff88}
 .dodgeLane:nth-child(2){left:33.333%}
 .dodgeLane:nth-child(3){left:66.666%;border:0}
-
-#dodgeHero{
-position:absolute;
-bottom:8px;
-left:50%;
-transform:translateX(-50%);
-font-size:52px;
-z-index:3;
-transition:left .12s;
-}
-
-.rock{
-position:absolute;
-top:-55px;
-font-size:43px;
-z-index:4;
-filter:drop-shadow(2px 4px 3px #222);
-}
-
-/* Butang kawalan */
-.dodgeControls{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:7px;
-margin-top:10px;
-background:#10432f;
-border-radius:12px;
-padding:8px;
-}
-
-.dodgeControls button{
-font-size:16px;
-padding:14px 5px;
-color:#38280c!important;
-}
-
-/* Butang dalam aksi */
-#challenge button{
-color:#38280c;
-text-shadow:none;
-}
-
-#challenge button.secondary{
-color:#fff!important;
-text-shadow:1px 1px 2px #09291e;
-}
-
-#challenge input{
-color:#173b29!important;
-background:#fff!important;
-}
-
-#challenge .progressBar{
-background:#d9e4d8;
-}
-
-#challenge .progressBar div{
-background:#ffd45e;
-}
-
+#dodgeHero{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:52px;z-index:3;transition:left .12s}
+.rock{position:absolute;top:-55px;font-size:43px;z-index:4;filter:drop-shadow(2px 4px 3px #222)}
+.dodgeControls{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px;background:#10432f;border-radius:12px;padding:8px}
+.dodgeControls button{font-size:16px;padding:14px 5px;color:#38280c!important}
+#challenge button{color:#38280c;text-shadow:none}
+#challenge button.secondary{color:#fff!important;text-shadow:1px 1px 2px #09291e}
+#challenge input{color:#173b29!important;background:#fff!important}
+#challenge .progressBar{background:#d9e4d8;height:9px;border-radius:20px;overflow:hidden}
+#challenge .progressBar div{background:#ffd45e;height:100%;border-radius:20px}
 .bigEmoji{font-size:65px}
-
-.soundButton{
-background:linear-gradient(135deg,#ffe27b,#ffb72e);
-color:#38280c;
-}
-
-@keyframes bob{
-50%{transform:translateY(-10px)}
-}
-
+.soundButton{background:linear-gradient(135deg,#ffe27b,#ffb72e);color:#38280c}
+@keyframes bob{50%{transform:translateY(-10px)}}
 .bob{animation:bob 1s infinite}
 
-@keyframes rockShake{
-0%,100%{transform:translateX(0)}
-25%{transform:translateX(-5px)}
-75%{transform:translateX(5px)}
-}
-
+/* ARENA MISI PENUH SKRIN */
+#missionScreen{position:fixed;inset:0;z-index:45;display:none;flex-direction:column;padding:10px;overflow-y:auto;background:#10251f}
+#missionScreen.active{display:flex}
+.missionTop{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+#missionScene{position:relative;min-height:190px;height:28vh;border:4px solid #ffd45e;border-radius:18px;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;font-size:clamp(25px,7vw,55px);text-shadow:2px 3px 5px #10251f;flex-shrink:0}
+#missionScene .sceneTitle{font-size:20px;font-weight:1000;background:#102d25dd;padding:8px 16px;border-radius:12px}
+#sceneDecor{font-size:clamp(35px,9vw,65px);letter-spacing:8px;margin:8px}
+#missionChallenge{flex:1;width:100%;max-width:700px;margin:10px auto}
+#missionChallenge #challenge{margin:0}
+.scene1{background:linear-gradient(#83cbe8 0 35%,#8b9b65 35% 60%,#61503c 60%)}
+.scene2{background:linear-gradient(#8ed9ec 0 40%,#45b8d1 40% 68%,#397b45 68%)}
+.scene3{background:linear-gradient(#8bd5a0,#277a45)}
+.scene4{background:linear-gradient(#a5d9ec,#7caa62 55%,#87613b 55%)}
+.scene5{background:linear-gradient(#e5b978,#8b5938 55%,#543b2b)}
+.scene6{background:linear-gradient(#164d32,#397c43 55%,#183b2b)}
+.scene7{background:linear-gradient(#9bd8ee 0 35%,#219fc5 35% 100%)}
+.scene8{background:linear-gradient(#382d45,#66506b 55%,#211d30)}
+#missionChallenge .option{color:#183d2a!important;text-shadow:none!important}
+#missionChallenge .option.selected{background:#ffe18b}
 @media(max-width:420px){
 .screen{padding:10px}
 #world{min-height:350px}
 .stat{font-size:12px;padding:7px}
 .challengeTitle{font-size:21px}
+#missionScene{min-height:165px;height:23vh}
 }
 </style>
 </head>
-<body>
 
+<body>
 <audio id="bgMusic" src="https://idmiidmi.github.io/Misi-Pahlawan-Alpha/Naga%20Api%20Zabarjad.mp3" loop></audio>
 
 <section id="openingScreen" class="screen center">
@@ -359,6 +229,19 @@ color:#38280c;
 </div>
 </section>
 
+<!-- ARENA MISI BAHARU -->
+<section id="missionScreen">
+<div class="missionTop">
+<div class="stat" id="missionNumber">🎮 MISI</div>
+<button class="danger" onclick="leaveMission()">✖ KELUAR MISI</button>
+</div>
+<div id="missionScene" class="scene1">
+<div id="sceneDecor">🪨 🏔️ 🪨</div>
+<div class="sceneTitle" id="sceneTitle">LALUAN BATU BERBAHAYA</div>
+</div>
+<div id="missionChallenge"></div>
+</section>
+
 <div id="modal"><div class="panel"><div id="modalContent"></div><button class="secondary" style="width:100%;margin-top:12px" onclick="closeModal()">TUTUP</button></div></div>
 <div id="toast"></div>
 
@@ -370,47 +253,25 @@ const bgMusic=document.getElementById("bgMusic");
 bgMusic.volume=.25;
 
 let audioCtx=null,sfxOn=true,sfxVolume=1;
-
 function audioReady(){
-try{
-if(!audioCtx){
-const AC=window.AudioContext||window.webkitAudioContext;
-if(!AC)return;
-audioCtx=new AC();
+try{if(!audioCtx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;audioCtx=new AC()}if(audioCtx.state==="suspended")audioCtx.resume()}catch(e){}
 }
-if(audioCtx.state==="suspended")audioCtx.resume();
-}catch(e){}
-}
-
 function tone(freq,duration=.12,type="sine",volume=.25,endFreq=null,delay=0){
-if(!sfxOn)return;
-audioReady();if(!audioCtx)return;
-const t=audioCtx.currentTime+delay;
-const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+if(!sfxOn)return;audioReady();if(!audioCtx)return;
+const t=audioCtx.currentTime+delay,o=audioCtx.createOscillator(),g=audioCtx.createGain();
 o.type=type;o.frequency.setValueAtTime(freq,t);
 if(endFreq)o.frequency.exponentialRampToValueAtTime(Math.max(1,endFreq),t+duration);
-g.gain.setValueAtTime(.001,t);
-g.gain.exponentialRampToValueAtTime(Math.min(.8,Math.max(.002,volume*sfxVolume*1.5)),t+.012);
-g.gain.exponentialRampToValueAtTime(.001,t+duration);
-o.connect(g);g.connect(audioCtx.destination);
-o.start(t);o.stop(t+duration+.03);
+g.gain.setValueAtTime(.001,t);g.gain.exponentialRampToValueAtTime(Math.min(.8,Math.max(.002,volume*sfxVolume*1.5)),t+.012);
+g.gain.exponentialRampToValueAtTime(.001,t+duration);o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+duration+.03);
 }
-
 function noise(duration=.12,volume=.2,filter=900){
-if(!sfxOn)return;
-audioReady();if(!audioCtx)return;
-const length=Math.max(1,Math.floor(audioCtx.sampleRate*duration));
-const buffer=audioCtx.createBuffer(1,length,audioCtx.sampleRate);
-const data=buffer.getChannelData(0);
+if(!sfxOn)return;audioReady();if(!audioCtx)return;
+const length=Math.max(1,Math.floor(audioCtx.sampleRate*duration)),buffer=audioCtx.createBuffer(1,length,audioCtx.sampleRate),data=buffer.getChannelData(0);
 for(let i=0;i<length;i++)data[i]=(Math.random()*2-1)*(1-i/length);
 const src=audioCtx.createBufferSource(),f=audioCtx.createBiquadFilter(),g=audioCtx.createGain();
-src.buffer=buffer;f.type="lowpass";f.frequency.value=filter;
-g.gain.setValueAtTime(Math.min(.8,volume*sfxVolume*1.5),audioCtx.currentTime);
-g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);
-src.connect(f);f.connect(g);g.connect(audioCtx.destination);
-src.start();src.stop(audioCtx.currentTime+duration);
+src.buffer=buffer;f.type="lowpass";f.frequency.value=filter;g.gain.setValueAtTime(Math.min(.8,volume*sfxVolume*1.5),audioCtx.currentTime);
+g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);src.connect(f);f.connect(g);g.connect(audioCtx.destination);src.start();src.stop(audioCtx.currentTime+duration);
 }
-
 function playSfx(name){
 if(!sfxOn)return;
 switch(name){
@@ -432,14 +293,11 @@ case"click":tone(420,.055,"sine",.18,360);break;
 case"win":tone(523,.18,"sine",.4,659);tone(659,.18,"sine",.4,784,.17);tone(784,.35,"sine",.45,1046,.34);tone(1046,.4,"sine",.4,1318,.52);break;
 }
 }
-
 function toggleSfx(){
-sfxOn=!sfxOn;
-let label=sfxOn?"🔊 KESAN BUNYI ON":"🔇 KESAN BUNYI OFF";
+sfxOn=!sfxOn;let label=sfxOn?"🔊 KESAN BUNYI ON":"🔇 KESAN BUNYI OFF";
 document.querySelectorAll(".soundButton").forEach(b=>b.textContent=label);
 if(sfxOn){audioReady();playSfx("success")}
 }
-
 document.addEventListener("pointerdown",audioReady,{once:true});
 document.addEventListener("keydown",audioReady,{once:true});
 
@@ -494,9 +352,22 @@ function attemptedCount(){return Object.keys(progress).filter(k=>progress[k]?.at
 function areaUnlocked(i){return isMaster||attemptedCount()>=areas[i].unlock}
 function localKey(){return "pn_"+user.id}
 function rankName(){return balance>=500?"Legenda Negara":balance>=250?"Pahlawan Hebat":balance>=100?"Wira Berani":"Wira Baharu"}
-function updateStats(){["pearls","introPearls"].forEach(id=>{let e=document.getElementById(id);if(e)e.textContent=balance});["rank","introRank"].forEach(id=>{let e=document.getElementById(id);if(e)e.textContent=rankName()})}
-function showScreen(id){if(!user&&["gameScreen","introScreen","characterScreen","leaderScreen","masterScreen"].includes(id))id="authScreen";stopVoice();document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id)?.classList.add("active");window.scrollTo(0,0)}
-function showModal(html){if(!requireLogin())return;stopVoice();document.getElementById("modalContent").innerHTML=html;document.getElementById("modal").style.display="flex"}
+function updateStats(){
+["pearls","introPearls"].forEach(id=>{let e=document.getElementById(id);if(e)e.textContent=balance});
+["rank","introRank"].forEach(id=>{let e=document.getElementById(id);if(e)e.textContent=rankName()});
+}
+function showScreen(id){
+if(!user&&["gameScreen","introScreen","characterScreen","leaderScreen","masterScreen"].includes(id))id="authScreen";
+stopVoice();
+document.getElementById("missionScreen").classList.remove("active");
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+document.getElementById(id)?.classList.add("active");
+window.scrollTo(0,0);
+}
+function showModal(html){
+if(!requireLogin())return;
+stopVoice();document.getElementById("modalContent").innerHTML=html;document.getElementById("modal").style.display="flex";
+}
 function closeModal(){stopDodge();stopVoice();document.getElementById("modal").style.display="none"}
 function beginStory(){audioReady();playSfx("success");storyIndex=0;showStory();showScreen("storyScreen");bgMusic.play().catch(()=>{})}
 function showStory(){document.getElementById("storyEmoji").textContent=stories[storyIndex][0];document.getElementById("storyTitle").textContent=stories[storyIndex][1];document.getElementById("storyText").textContent=stories[storyIndex][2]}
@@ -508,7 +379,7 @@ function heroGraphic(){
 let c=characters.find(x=>x.id===selectedCharacter)||characters[0];
 let ears=c.id==="arnab"?`<ellipse cx="35" cy="15" rx="11" ry="27" fill="${c.color}"/><ellipse cx="65" cy="15" rx="11" ry="27" fill="${c.color}"/>`:`<path d="M20 35 L24 8 L45 28 M55 28 L76 8 L80 35" fill="${c.color}" stroke="#704a30" stroke-width="3"/>`;
 if(c.id==="kijang")ears+=`<path d="M40 24 L28 0 M60 24 L72 0" stroke="#80522e" stroke-width="5"/>`;
-return `<svg class="heroSvg" viewBox="0 0 100 150"><ellipse cx="50" cy="137" rx="29" ry="8" fill="#173d2a" opacity=".4"/>${ears}<ellipse cx="50" cy="105" rx="27" ry="32" fill="${c.color}" stroke="#704a30" stroke-width="3"/><ellipse cx="50" cy="55" rx="35" ry="34" fill="${c.color}" stroke="#704a30" stroke-width="3"/><ellipse cx="38" cy="52" rx="5" ry="7"/><ellipse cx="62" cy="52" rx="5" ry="7"/><ellipse cx="50" cy="67" rx="8" ry="5" fill="#8d5147"/><path d="M43 77 Q50 85 57 77" fill="none" stroke="#5d392e" stroke-width="2"/><path d="M32 127 L29 145 M68 127 L71 145" stroke="${c.color}" stroke-width="10" stroke-linecap="round"/></svg>`
+return `<svg class="heroSvg" viewBox="0 0 100 150"><ellipse cx="50" cy="137" rx="29" ry="8" fill="#173d2a" opacity=".4"/>${ears}<ellipse cx="50" cy="105" rx="27" ry="32" fill="${c.color}" stroke="#704a30" stroke-width="3"/><ellipse cx="50" cy="55" rx="35" ry="34" fill="${c.color}" stroke="#704a30" stroke-width="3"/><ellipse cx="38" cy="52" rx="5" ry="7"/><ellipse cx="62" cy="52" rx="5" ry="7"/><ellipse cx="50" cy="67" rx="8" ry="5" fill="#8d5147"/><path d="M43 77 Q50 85 57 77" fill="none" stroke="#5d392e" stroke-width="2"/><path d="M32 127 L29 145 M68 127 L71 145" stroke="${c.color}" stroke-width="10" stroke-linecap="round"/></svg>`;
 }
 function renderCharacterPicker(){document.getElementById("characterGrid").innerHTML=characters.map(c=>`<button class="character ${selectedCharacter===c.id?"selected":""}" onclick="chooseCharacter('${c.id}')"><div class="animal">${c.emoji}</div>${c.name}</button>`).join("")}
 function chooseCharacter(id){playSfx("click");selectedCharacter=id;renderCharacterPicker()}
@@ -520,12 +391,66 @@ function move(x,y){playSfx("step");heroX=Math.max(5,Math.min(85,heroX+x*5));hero
 function talkNPC(i){playSfx("click");let t=i===0?"Burung: Teruskan membantu masyarakat!":"Monyet: Setiap cabaran mengajar kita sesuatu!";toast(t);speakText(t)}
 function collectPearl(){if(pearlTaken){toast("Mutiara sudah dikutip.");return}playSfx("pearl");pearlTaken=true;balance+=5;updateStats();saveLocal();toast("+5 Mutiara bonus!")}
 function availableMissions(){return missions.filter(m=>m.area===currentArea&&(isMaster||!attempted(m.id)))}
-function interact(){playSfx("click");if(!requireLogin())return;if(remainingSeconds<=0&&!isMaster){toast("Masa permainan tamat.");return}let m=availableMissions()[0];if(!m){showMissionBook();return}startChallenge(m)}
-function showMissionBook(){let html=missions.map((m,i)=>{let locked=!areaUnlocked(m.area),done=attempted(m.id);return `<div class="missionCard"><h3>${i+1}. ${escapeHTML(m.title)}</h3><p>${escapeHTML(m.question)}</p><p>🎮 ${gameNames[i]}</p><p>${locked?"🔒 Kawasan terkunci":done?"✅ Selesai":"🟢 Tersedia"}</p><button ${locked||(done&&!isMaster)?"disabled":""} onclick="startChallengeById('${m.id}')">${done?"ULANG MISI":"MULA CABARAN"}</button></div>`}).join("");showModal(`<h2>📖 BUKU MISI</h2><p>Setiap misi mempunyai cabaran unik.</p>${html}`)}
-function startChallengeById(id){let m=missions.find(x=>x.id===id);if(!m||!areaUnlocked(m.area))return;closeModal();currentArea=m.area;renderWorld();startChallenge(m)}
-function startChallenge(m){stopDodge();currentMission=m;challengeStep=0;challengeData={};selectedAnswer=null;showModal(`<h2>🎮 MISI ${missions.indexOf(m)+1}: ${escapeHTML(m.title)}</h2><div id="challenge"></div>`);renderChallenge()}
-function challengeFrame(title,description,content,progressText){let c=document.getElementById("challenge");if(!c)return;c.innerHTML=`<div class="challengeTitle">${title}</div><p>${description}</p><div class="progressBar"><div style="width:${challengeStep/10*100}%"></div></div><p>⭐ Kemajuan: ${progressText}</p><div class="challengeArea">${content}</div>`}
-function completeChallenge(){stopDodge();playSfx("win");toast("🏆 CABARAN BERJAYA! Bintang Emas diperoleh!");challengeData.won=true;setTimeout(openMissionQuestion,600)}
+function interact(){
+playSfx("click");if(!requireLogin())return;
+if(remainingSeconds<=0&&!isMaster){toast("Masa permainan tamat.");return}
+let m=availableMissions()[0];if(!m){showMissionBook();return}startChallenge(m);
+}
+function showMissionBook(){
+let html=missions.map((m,i)=>{
+let locked=!areaUnlocked(m.area),done=attempted(m.id);
+return `<div class="missionCard"><h3>${i+1}. ${escapeHTML(m.title)}</h3><p>${escapeHTML(m.question)}</p><p>🎮 ${gameNames[i]}</p><p>${locked?"🔒 Kawasan terkunci":done?"✅ Selesai":"🟢 Tersedia"}</p><button ${locked||(done&&!isMaster)?"disabled":""} onclick="startChallengeById('${m.id}')">${done?"ULANG MISI":"MULA CABARAN"}</button></div>`;
+}).join("");
+showModal(`<h2>📖 BUKU MISI</h2><p>Setiap misi mempunyai cabaran unik.</p>${html}`);
+}
+
+/* PERTUKARAN ARENA */
+function missionSceneSetup(m){
+const n=missions.indexOf(m)+1;
+const scenes=[
+["scene1","🪨 🏔️ 🪨","LALUAN BATU BERBAHAYA"],
+["scene2","🪨 💦 🪨","SUNGAI BATU LOMPATAN"],
+["scene3","🐘 🌳 🍌","HUTAN GAJAH"],
+["scene4","🏹 🎯 🏹","PADANG MEMANAH"],
+["scene5","🧩 🏡 🧩","BENGKEL PUZZLE"],
+["scene6","🌳 🍄 🦋","HUTAN TERSEMBUNYI"],
+["scene7","🚣 🌊 ⭐","SUNGAI PERLUMBAAN"],
+["scene8","🗝️ 💎 🕯️","GUA KOD RAHSIA"]
+];
+const s=scenes[n-1],scene=document.getElementById("missionScene");
+scene.className=s[0];
+document.getElementById("sceneDecor").textContent=s[1];
+document.getElementById("sceneTitle").textContent=s[2];
+document.getElementById("missionNumber").textContent="🎮 MISI "+n+" / 8";
+}
+function startChallengeById(id){
+let m=missions.find(x=>x.id===id);
+if(!m||!areaUnlocked(m.area))return;
+closeModal();currentArea=m.area;renderWorld();startChallenge(m);
+}
+function startChallenge(m){
+stopDodge();closeModal();
+currentMission=m;challengeStep=0;challengeData={};selectedAnswer=null;
+missionSceneSetup(m);
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+document.getElementById("missionScreen").classList.add("active");
+window.scrollTo(0,0);
+renderChallenge();
+}
+function leaveMission(){
+stopDodge();stopVoice();currentMission=null;
+document.getElementById("missionScreen").classList.remove("active");
+document.getElementById("gameScreen").classList.add("active");
+renderWorld();
+}
+function challengeFrame(title,description,content,progressText){
+let c=document.getElementById("missionChallenge");if(!c)return;
+c.innerHTML=`<div id="challenge"><div class="challengeTitle">${title}</div><p>${description}</p><div class="progressBar"><div style="width:${challengeStep/10*100}%"></div></div><p>⭐ Kemajuan: ${progressText}</p><div class="challengeArea">${content}</div></div>`;
+}
+function completeChallenge(){
+stopDodge();playSfx("win");toast("🏆 CABARAN BERJAYA! Bintang Emas diperoleh!");
+challengeData.won=true;setTimeout(openMissionQuestion,600);
+}
 
 /* CABARAN 1 */
 function stopDodge(){dodgeActive=false;if(dodgeFrame)cancelAnimationFrame(dodgeFrame);dodgeFrame=null;dodgeRock=null}
@@ -533,46 +458,31 @@ function gameDodge(){
 stopDodge();dodgeCount=0;dodgeLane=1;challengeStep=0;dodgeSpeed=3;
 challengeFrame("🪨 ELAK BALINGAN BATU","Batu akan dibaling ke arah wira. Gerakkan wira ke lorong lain sebelum batu terkena!",`
 <div style="font-weight:900">BALINGAN: <span id="dodgeScore">0</span> / 10</div>
-<div id="dodgeArena">
-<div class="dodgeLane" style="left:0"></div><div class="dodgeLane"></div><div class="dodgeLane"></div>
-<div id="dodgeHero">${characters.find(c=>c.id===selectedCharacter)?.emoji||"🐹"}</div>
-</div>
-<div class="dodgeControls">
-<button onclick="dodgeMove(0)">⬅️ KIRI</button>
-<button onclick="dodgeMove(1)">⬆️ TENGAH</button>
-<button onclick="dodgeMove(2)">KANAN ➡️</button>
-</div>
-<p id="dodgeMessage">Bersedia! Batu akan datang sebentar lagi.</p>`,
-"0/10");
+<div id="dodgeArena"><div class="dodgeLane" style="left:0"></div><div class="dodgeLane"></div><div class="dodgeLane"></div><div id="dodgeHero">${characters.find(c=>c.id===selectedCharacter)?.emoji||"🐹"}</div></div>
+<div class="dodgeControls"><button onclick="dodgeMove(0)">⬅️ KIRI</button><button onclick="dodgeMove(1)">⬆️ TENGAH</button><button onclick="dodgeMove(2)">KANAN ➡️</button></div>
+<p id="dodgeMessage">Bersedia! Batu akan datang sebentar lagi.</p>`,"0/10");
 dodgeActive=true;dodgeLast=performance.now();dodgeRock=null;
 setTimeout(()=>{if(dodgeActive)spawnRock()},800);
-dodgeFrame=requestAnimationFrame(dodgeLoop)
+dodgeFrame=requestAnimationFrame(dodgeLoop);
 }
 function dodgeMove(lane){if(!dodgeActive)return;playSfx("step");dodgeLane=lane;let h=document.getElementById("dodgeHero");if(h)h.style.left=(16.66+lane*33.33)+"%"}
 function spawnRock(){
 if(!dodgeActive)return;
-let lane=Math.floor(Math.random()*3);
-dodgeRock={lane,y:-45};
+let lane=Math.floor(Math.random()*3);dodgeRock={lane,y:-45};
 let arena=document.getElementById("dodgeArena");
-if(arena){
-let r=document.createElement("div");r.className="rock";r.textContent="🪨";
-r.style.left=(lane*33.333+8)+"%";r.id="activeRock";arena.appendChild(r);
-playSfx("rock");
-}
+if(arena){let r=document.createElement("div");r.className="rock";r.textContent="🪨";r.style.left=(lane*33.333+8)+"%";r.id="activeRock";arena.appendChild(r);playSfx("rock")}
 }
 function dodgeLoop(now){
 if(!dodgeActive)return;
 let dt=Math.min(40,now-dodgeLast);dodgeLast=now;
 if(dodgeRock){
 dodgeRock.y+=dodgeSpeed*dt/16;
-let r=document.getElementById("activeRock");
-if(r)r.style.top=dodgeRock.y+"px";
+let r=document.getElementById("activeRock");if(r)r.style.top=dodgeRock.y+"px";
 if(dodgeRock.y>=205){
 if(dodgeRock.lane===dodgeLane){
-dodgeActive=false;stopDodge();playSfx("hit");
-challengeData.count=0;challengeStep=0;
-let c=document.getElementById("challenge");
-if(c)c.innerHTML=`<div class="challengeTitle">💥 TERKENA BATU!</div><div class="bigEmoji">🪨</div><p>Wira perlu lebih pantas mengelak.</p><p>Cabaran dimulakan semula.</p><button onclick="gameDodge()">🔄 CUBA SEMULA</button>`;
+dodgeActive=false;stopDodge();playSfx("hit");challengeData.count=0;challengeStep=0;
+let c=document.getElementById("missionChallenge");
+if(c)c.innerHTML=`<div id="challenge"><div class="challengeTitle">💥 TERKENA BATU!</div><div class="bigEmoji">🪨</div><p>Wira perlu lebih pantas mengelak.</p><p>Cabaran dimulakan semula.</p><button onclick="gameDodge()">🔄 CUBA SEMULA</button></div>`;
 return;
 }
 dodgeCount++;challengeStep=dodgeCount;playSfx("success");
@@ -580,82 +490,332 @@ let s=document.getElementById("dodgeScore");if(s)s.textContent=dodgeCount;
 let msg=document.getElementById("dodgeMessage");if(msg)msg.textContent="Hebat! Balingan berjaya dielakkan.";
 if(r)r.remove();dodgeRock=null;
 if(dodgeCount>=10){completeChallenge();return}
-dodgeSpeed=Math.min(5.5,3+dodgeCount*.18);
-setTimeout(()=>spawnRock(),650);
+dodgeSpeed=Math.min(5.5,3+dodgeCount*.18);setTimeout(()=>spawnRock(),650);
 }
 }
-dodgeFrame=requestAnimationFrame(dodgeLoop)
+dodgeFrame=requestAnimationFrame(dodgeLoop);
 }
 
 /* CABARAN 2 */
-function gameJump(){challengeFrame("🪨 LOMPAT BATU","Lompat dari batu ke batu sehingga sampai ke peti harta. Buat 10 lompatan.",`<div class="bigEmoji">🏃</div><p>BATU ${challengeStep+1} → BATU ${challengeStep+2}</p><button style="font-size:28px" onclick="jumpStep()">⬆️ LOMPAT!</button><div style="font-size:35px">🪨　🪨　🪨　🪨</div>`,challengeStep+"/10")}
-function jumpStep(){playSfx("jump");challengeStep++;if(challengeStep>=10){playSfx("success");challengeFrame("🎁 PETI DITEMUI!","Cari pasangan gambar yang sama.",pairGameHTML(),"10/10");initPairs()}else gameJump()}
+function gameJump(){
+challengeFrame("🪨 LOMPAT BATU","Lompat dari batu ke batu sehingga sampai ke peti harta. Buat 10 lompatan.",`<div class="bigEmoji">🏃</div><p>BATU ${challengeStep+1} → BATU ${challengeStep+2}</p><button style="font-size:28px" onclick="jumpStep()">⬆️ LOMPAT!</button><div style="font-size:35px">🪨　🪨　🪨　🪨</div>`,challengeStep+"/10");
+}
+function jumpStep(){
+playSfx("jump");challengeStep++;
+if(challengeStep>=10){playSfx("success");challengeFrame("🎁 PETI DITEMUI!","Cari pasangan gambar yang sama.",pairGameHTML(),"10/10");initPairs()}
+else gameJump();
+}
 function pairGameHTML(){return `<p>Suaikan gambar dengan pasangan yang sama.</p><div id="pairs" class="gameGrid"></div>`}
-function initPairs(){let icons=["🌺","🐟","🌴","🐟","🌴","🌺"];challengeData.pairs=icons.sort(()=>Math.random()-.5);challengeData.pairSelected=[];challengeData.pairFound=[];drawPairs()}
-function drawPairs(){let box=document.getElementById("pairs");if(!box)return;box.innerHTML=challengeData.pairs.map((v,i)=>`<button onclick="selectPair(${i})">${challengeData.pairFound.includes(i)?v:challengeData.pairSelected.includes(i)?v:"❔"}</button>`).join("")}
-function selectPair(i){if(challengeData.pairFound.includes(i)||challengeData.pairSelected.includes(i))return;playSfx("puzzle");challengeData.pairSelected.push(i);if(challengeData.pairSelected.length===2){let [a,b]=challengeData.pairSelected;if(challengeData.pairs[a]===challengeData.pairs[b]){challengeData.pairFound.push(a,b);toast("Padanan tepat!");playSfx("success")}else{toast("Belum sepadan. Cuba lagi.");playSfx("fail")}challengeData.pairSelected=[];drawPairs();if(challengeData.pairFound.length===6)setTimeout(openMissionQuestion,600)}else drawPairs()}
+function initPairs(){
+let icons=["🌺","🐟","🌴","🐟","🌴","🌺"];
+challengeData.pairs=icons.sort(()=>Math.random()-.5);challengeData.pairSelected=[];challengeData.pairFound=[];drawPairs();
+}
+function drawPairs(){
+let box=document.getElementById("pairs");if(!box)return;
+box.innerHTML=challengeData.pairs.map((v,i)=>`<button onclick="selectPair(${i})">${challengeData.pairFound.includes(i)?v:challengeData.pairSelected.includes(i)?v:"❔"}</button>`).join("");
+}
+function selectPair(i){
+if(challengeData.pairFound.includes(i)||challengeData.pairSelected.includes(i))return;
+playSfx("puzzle");challengeData.pairSelected.push(i);
+if(challengeData.pairSelected.length===2){
+let [a,b]=challengeData.pairSelected;
+if(challengeData.pairs[a]===challengeData.pairs[b]){challengeData.pairFound.push(a,b);toast("Padanan tepat!");playSfx("success")}
+else{toast("Belum sepadan. Cuba lagi.");playSfx("fail")}
+challengeData.pairSelected=[];drawPairs();
+if(challengeData.pairFound.length===6)setTimeout(openMissionQuestion,600);
+}else drawPairs();
+}
 
 /* CABARAN 3 */
-function gameElephant(){challengeFrame("🐘 BERI GAJAH MAKAN","Pilih tiga makanan yang sesuai untuk gajah.",`<div class="bigEmoji bob">🐘</div><p>Pilih makanan.</p><div class="gameGrid"><button onclick="feedElephant('🍌')">🍌</button><button onclick="feedElephant('🥕')">🥕</button><button onclick="feedElephant('🍃')">🍃</button><button onclick="feedElephant('🍭')">🍭</button><button onclick="feedElephant('🍕')">🍕</button><button onclick="feedElephant('🍬')">🍬</button></div><p>Makanan: ${challengeData.feeds||0}/3</p>`,(challengeData.feeds||0)+"/3")}
-function feedElephant(f){if(["🍌","🥕","🍃"].includes(f)){playSfx("feed");challengeData.feeds=(challengeData.feeds||0)+1;toast("Gajah suka makanan ini!")}else{playSfx("fail");challengeData.feeds=0;toast("Makanan tidak sesuai. Cuba lagi!")}if(challengeData.feeds>=3){playSfx("success");challengeFrame("💙 MUTIARA BIRU!","Sentuh mutiara untuk mengambilnya.",`<div class="bigEmoji bob">🐘</div><button style="font-size:45px" onclick="takeBluePearl()">💎</button>`,"3/3")}else gameElephant()}
+function gameElephant(){
+challengeFrame("🐘 BERI GAJAH MAKAN","Pilih tiga makanan yang sesuai untuk gajah.",`<div class="bigEmoji bob">🐘</div><p>Pilih makanan.</p><div class="gameGrid"><button onclick="feedElephant('🍌')">🍌</button><button onclick="feedElephant('🥕')">🥕</button><button onclick="feedElephant('🍃')">🍃</button><button onclick="feedElephant('🍭')">🍭</button><button onclick="feedElephant('🍕')">🍕</button><button onclick="feedElephant('🍬')">🍬</button></div><p>Makanan: ${challengeData.feeds||0}/3</p>`,(challengeData.feeds||0)+"/3");
+}
+function feedElephant(f){
+if(["🍌","🥕","🍃"].includes(f)){playSfx("feed");challengeData.feeds=(challengeData.feeds||0)+1;toast("Gajah suka makanan ini!")}
+else{playSfx("fail");challengeData.feeds=0;toast("Makanan tidak sesuai. Cuba lagi!")}
+if(challengeData.feeds>=3){playSfx("success");challengeFrame("💙 MUTIARA BIRU!","Sentuh mutiara untuk mengambilnya.",`<div class="bigEmoji bob">🐘</div><button style="font-size:45px" onclick="takeBluePearl()">💎</button>`,"3/3")}
+else gameElephant();
+}
 function takeBluePearl(){playSfx("pearl");toast("💙 Mutiara Biru diperoleh!");openMissionQuestion()}
 
 /* CABARAN 4 */
-function gameArchery(){challengeFrame("🏹 MEMANAH SASARAN","Tekan sasaran yang betul. Kena 5 kali untuk berjaya.",`<div class="bigEmoji">🏹</div><div class="gameGrid"><button onclick="shootTarget(0)">🎯</button><button onclick="shootTarget(1)">🎯</button><button onclick="shootTarget(2)">🎯</button></div><p>Tekan sasaran yang betul!</p>`,challengeStep+"/5")}
-function shootTarget(i){playSfx("arrow");let target=challengeData.target??1;if(i===target){playSfx("target");challengeStep++;toast("🎯 Tepat!");challengeData.target=(target+1)%3}else{playSfx("fail");challengeStep=Math.max(0,challengeStep-1);toast("Anak panah tersasar!")}if(challengeStep>=5)completeChallenge();else gameArchery()}
+function gameArchery(){
+challengeFrame("🏹 MEMANAH SASARAN","Tekan sasaran yang betul. Kena 5 kali untuk berjaya.",`<div class="bigEmoji">🏹</div><div class="gameGrid"><button onclick="shootTarget(0)">🎯</button><button onclick="shootTarget(1)">🎯</button><button onclick="shootTarget(2)">🎯</button></div><p>Tekan sasaran yang betul!</p>`,challengeStep+"/5");
+}
+function shootTarget(i){
+playSfx("arrow");let target=challengeData.target??1;
+if(i===target){playSfx("target");challengeStep++;toast("🎯 Tepat!");challengeData.target=(target+1)%3}
+else{playSfx("fail");challengeStep=Math.max(0,challengeStep-1);toast("Anak panah tersasar!")}
+if(challengeStep>=5)completeChallenge();else gameArchery();
+}
 
 /* CABARAN 5 */
-function gamePuzzle(){let items=challengeData.puzzle||["🌴","🌺","🦜","🏡"];challengeFrame("🧩 SUSUN PUZZLE","Susun gambar mengikut urutan: 🌴 🌺 🦜 🏡",`<p>Tekan kepingan mengikut susunan.</p><div class="gameGrid">${items.map((v,i)=>`<button onclick="choosePuzzle(${i})">${v}</button>`).join("")}</div><p>Dipilih: ${(challengeData.chosen||[]).map(x=>items[x]).join(" ")}</p>`,(challengeData.chosen||[]).length+"/4")}
-function choosePuzzle(i){playSfx("puzzle");let items=challengeData.puzzle||["🌴","🌺","🦜","🏡"];challengeData.chosen=challengeData.chosen||[];if(challengeData.chosen.includes(i))return;challengeData.chosen.push(i);if(challengeData.chosen.length===4){if(challengeData.chosen.every((x,j)=>items[x]===["🌴","🌺","🦜","🏡"][j]))completeChallenge();else{playSfx("fail");toast("Puzzle belum tepat. Cuba lagi.");challengeData.chosen=[];gamePuzzle()}}else gamePuzzle()}
+function gamePuzzle(){
+let items=challengeData.puzzle||["🌴","🌺","🦜","🏡"];
+challengeFrame("🧩 SUSUN PUZZLE","Susun gambar mengikut urutan: 🌴 🌺 🦜 🏡",`<p>Tekan kepingan mengikut susunan.</p><div class="gameGrid">${items.map((v,i)=>`<button onclick="choosePuzzle(${i})">${v}</button>`).join("")}</div><p>Dipilih: ${(challengeData.chosen||[]).map(x=>items[x]).join(" ")}</p>`,(challengeData.chosen||[]).length+"/4");
+}
+function choosePuzzle(i){
+playSfx("puzzle");let items=challengeData.puzzle||["🌴","🌺","🦜","🏡"];
+challengeData.chosen=challengeData.chosen||[];if(challengeData.chosen.includes(i))return;
+challengeData.chosen.push(i);
+if(challengeData.chosen.length===4){
+if(challengeData.chosen.every((x,j)=>items[x]===["🌴","🌺","🦜","🏡"][j]))completeChallenge();
+else{playSfx("fail");toast("Puzzle belum tepat. Cuba lagi.");challengeData.chosen=[];gamePuzzle()}
+}else gamePuzzle();
+}
 
 /* CABARAN 6 */
-function gameHidden(){let found=challengeData.found||[];challengeFrame("🔍 CARI BARANG TERSEMBUNYI","Cari lima objek tersembunyi.",`<p>Sentuh objek yang dicari:</p><div class="gameGrid">${["🍄","🌺","🪶","🍃","🪵","🐚","🦋","🌰","🍀"].map((v,i)=>`<button onclick="findObject(${i})">${found.includes(i)?"✅":v}</button>`).join("")}</div><p>Barang dijumpai: ${found.length}/5</p>`,found.length+"/5")}
-function findObject(i){let f=challengeData.found||[];if(!f.includes(i)){playSfx("find");f.push(i);challengeData.found=f;toast("Objek dijumpai!")}if(f.length>=5)completeChallenge();else gameHidden()}
+function gameHidden(){
+let found=challengeData.found||[];
+challengeFrame("🔍 CARI BARANG TERSEMBUNYI","Cari lima objek tersembunyi.",`<p>Sentuh objek yang dicari:</p><div class="gameGrid">${["🍄","🌺","🪶","🍃","🪵","🐚","🦋","🌰","🍀"].map((v,i)=>`<button onclick="findObject(${i})">${found.includes(i)?"✅":v}</button>`).join("")}</div><p>Barang dijumpai: ${found.length}/5</p>`,found.length+"/5");
+}
+function findObject(i){
+let f=challengeData.found||[];
+if(!f.includes(i)){playSfx("find");f.push(i);challengeData.found=f;toast("Objek dijumpai!")}
+if(f.length>=5)completeChallenge();else gameHidden();
+}
 
 /* CABARAN 7 */
-function gameBoat(){challengeFrame("🚣 LUMBA PERAHU","Gerakkan perahu dan kumpulkan 5 bintang.",`<div class="bigEmoji">🚣</div><p>Halangan di hadapan!</p><button onclick="boatMove(-1)">⬅️</button><button onclick="boatMove(1)">➡️</button><button class="secondary" onclick="boatMove(0)">TERUS</button><p>⭐ ${challengeData.stars||0}/5</p>`,(challengeData.stars||0)+"/5")}
-function boatMove(d){playSfx("boat");let lane=challengeData.lane??1,h=challengeData.boatTurn%3;lane=Math.max(0,Math.min(2,lane+d));challengeData.lane=lane;challengeData.boatTurn=(challengeData.boatTurn||0)+1;if(lane===h){playSfx("water");challengeData.stars=0;toast("🚣 Terlanggar batu! Cuba semula.")}else{challengeData.stars=(challengeData.stars||0)+1;toast("⭐ Bintang sungai diperoleh!")}if(challengeData.stars>=5)completeChallenge();else gameBoat()}
+function gameBoat(){
+challengeFrame("🚣 LUMBA PERAHU","Gerakkan perahu dan kumpulkan 5 bintang.",`<div class="bigEmoji">🚣</div><p>Halangan di hadapan!</p><button onclick="boatMove(-1)">⬅️</button><button onclick="boatMove(1)">➡️</button><button class="secondary" onclick="boatMove(0)">TERUS</button><p>⭐ ${challengeData.stars||0}/5</p>`,(challengeData.stars||0)+"/5");
+}
+function boatMove(d){
+playSfx("boat");let lane=challengeData.lane??1,h=challengeData.boatTurn%3;
+lane=Math.max(0,Math.min(2,lane+d));challengeData.lane=lane;challengeData.boatTurn=(challengeData.boatTurn||0)+1;
+if(lane===h){playSfx("water");challengeData.stars=0;toast("🚣 Terlanggar batu! Cuba semula.")}
+else{challengeData.stars=(challengeData.stars||0)+1;toast("⭐ Bintang sungai diperoleh!")}
+if(challengeData.stars>=5)completeChallenge();else gameBoat();
+}
 
 /* CABARAN 8 */
-function gameCode(){let clues=["Saya berwarna hijau dan tumbuh di hutan.","Saya hidup di sungai dan boleh berenang.","Saya mempunyai sayap dan boleh terbang."],n=challengeData.codeIndex||0;challengeFrame("🔐 TEKA KOD RAHSIA","Selesaikan tiga petunjuk untuk membuka pintu.",`<div class="bigEmoji">🗝️</div><h3>Petunjuk ${n+1}/3</h3><p>${clues[n]}</p><div class="gameGrid">${["🌴","🐟","🦜"].map(v=>`<button onclick="answerCode('${v}')">${v}</button>`).join("")}</div>`,n+"/3")}
-function answerCode(v){let n=challengeData.codeIndex||0;if(v===["🌴","🐟","🦜"][n]){playSfx("success");challengeData.codeIndex=n+1;toast("🔓 Kod betul!");if(challengeData.codeIndex===3)completeChallenge();else gameCode()}else{playSfx("fail");toast("Kod salah. Cuba lagi!")}}
-function renderChallenge(){let n=missions.indexOf(currentMission);challengeStep=0;challengeData={};if(n===0)gameDodge();if(n===1)gameJump();if(n===2)gameElephant();if(n===3)gameArchery();if(n===4)gamePuzzle();if(n===5)gameHidden();if(n===6)gameBoat();if(n===7)gameCode()}
+function gameCode(){
+let clues=["Saya berwarna hijau dan tumbuh di hutan.","Saya hidup di sungai dan boleh berenang.","Saya mempunyai sayap dan boleh terbang."],n=challengeData.codeIndex||0;
+challengeFrame("🔐 TEKA KOD RAHSIA","Selesaikan tiga petunjuk untuk membuka pintu.",`<div class="bigEmoji">🗝️</div><h3>Petunjuk ${n+1}/3</h3><p>${clues[n]}</p><div class="gameGrid">${["🌴","🐟","🦜"].map(v=>`<button onclick="answerCode('${v}')">${v}</button>`).join("")}</div>`,n+"/3");
+}
+function answerCode(v){
+let n=challengeData.codeIndex||0;
+if(v===["🌴","🐟","🦜"][n]){
+playSfx("success");challengeData.codeIndex=n+1;toast("🔓 Kod betul!");
+if(challengeData.codeIndex===3)completeChallenge();else gameCode();
+}else{playSfx("fail");toast("Kod salah. Cuba lagi!")}
+}
+function renderChallenge(){
+let n=missions.indexOf(currentMission);challengeStep=0;challengeData={};
+if(n===0)gameDodge();
+if(n===1)gameJump();
+if(n===2)gameElephant();
+if(n===3)gameArchery();
+if(n===4)gamePuzzle();
+if(n===5)gameHidden();
+if(n===6)gameBoat();
+if(n===7)gameCode();
+}
 
-/* SOALAN ILMU */
-function openMissionQuestion(){stopDodge();if(!currentMission)return;selectedAnswer=null;let m=currentMission;showModal(`<h2>⭐ BINTANG EMAS DIPEROLEH!</h2><p>Cabaran berjaya diselesaikan. Sekarang jawab soalan ilmu.</p><h3>${escapeHTML(m.title)}</h3><p>${escapeHTML(m.question)}</p>${["A","B","C"].map(k=>`<button class="option" id="opt${k}" onclick="selectOption('${k}')">${k}. ${escapeHTML(m[k.toLowerCase()])}</button>`).join("")}<button style="width:100%;margin-top:12px" onclick="speakQuestion()">🔊 DENGAR SOALAN</button><button style="width:100%;margin-top:12px" onclick="submitAnswer()">HANTAR JAWAPAN</button>`)}
-function selectOption(k){playSfx("click");selectedAnswer=k;["A","B","C"].forEach(x=>document.getElementById("opt"+x)?.classList.toggle("selected",x===k))}
-function speakQuestion(){let m=currentMission;speakText(m.question+". Pilihan A. "+m.a+". Pilihan B. "+m.b+". Pilihan C. "+m.c)}
-async function submitAnswer(){if(!selectedAnswer){toast("Pilih jawapan dahulu.");return}let m=currentMission,correct=selectedAnswer===m.answer,reward=correct?20:-3;playSfx(correct?"win":"fail");balance=Math.max(0,balance+reward);progress[m.id]={attempted:true,correct,answer:selectedAnswer};updateStats();saveLocal();showModal(`<h2>${correct?"🎉 TAHNIAH!":"💪 CUBA LAGI!"}</h2><p>${correct?"Jawapan tepat!":"Jawapan belum tepat."}</p><div class="bigEmoji">${correct?"🏆":"⭐"}</div><h2 style="text-align:center">${correct?"+20":"−3"} Mutiara</h2><p>Jumlah Mutiara: <b>${balance}</b></p><button style="width:100%" onclick="closeModal();renderWorld()">TERUSKAN</button>`);speakText(correct?"Tahniah! Kamu mendapat dua puluh Mutiara.":"Jawapan belum tepat. Tiga Mutiara ditolak.");await saveProgressToCloud(m,selectedAnswer,correct,reward)}
+/* SOALAN ILMU DAN KEPUTUSAN */
+function openMissionQuestion(){
+stopDodge();if(!currentMission)return;
+selectedAnswer=null;let m=currentMission;
+document.getElementById("missionChallenge").innerHTML=`
+<div id="challenge">
+<div class="challengeTitle">⭐ BINTANG EMAS DIPEROLEH!</div>
+<p>Cabaran berjaya diselesaikan. Sekarang jawab soalan ilmu.</p>
+<h3>${escapeHTML(m.title)}</h3>
+<p>${escapeHTML(m.question)}</p>
+${["A","B","C"].map(k=>`<button class="option" id="opt${k}" onclick="selectOption('${k}')">${k}. ${escapeHTML(m[k.toLowerCase()])}</button>`).join("")}
+<button style="width:100%;margin-top:12px" onclick="speakQuestion()">🔊 DENGAR SOALAN</button>
+<button style="width:100%;margin-top:12px" onclick="submitAnswer()">HANTAR JAWAPAN</button>
+</div>`;
+}
+function selectOption(k){
+playSfx("click");selectedAnswer=k;
+["A","B","C"].forEach(x=>document.getElementById("opt"+x)?.classList.toggle("selected",x===k));
+}
+function speakQuestion(){
+let m=currentMission;
+speakText(m.question+". Pilihan A. "+m.a+". Pilihan B. "+m.b+". Pilihan C. "+m.c);
+}
+async function submitAnswer(){
+if(!selectedAnswer){toast("Pilih jawapan dahulu.");return}
+let m=currentMission,correct=selectedAnswer===m.answer,reward=correct?20:-3;
+playSfx(correct?"win":"fail");
+balance=Math.max(0,balance+reward);
+progress[m.id]={attempted:true,correct,answer:selectedAnswer};
+updateStats();saveLocal();
+document.getElementById("missionChallenge").innerHTML=`
+<div id="challenge" style="text-align:center">
+<div class="challengeTitle">${correct?"🎉 TAHNIAH!":"💪 CUBA LAGI!"}</div>
+<div class="bigEmoji">${correct?"🏆":"⭐"}</div>
+<h2>${correct?"Jawapan tepat!":"Jawapan belum tepat."}</h2>
+<h2>${correct?"+20":"−3"} Mutiara</h2>
+<p>Jumlah Mutiara: <b>${balance}</b></p>
+<button style="width:100%" onclick="finishMission()">KEMBALI KE DUNIA</button>
+</div>`;
+speakText(correct?"Tahniah! Kamu mendapat dua puluh Mutiara.":"Jawapan belum tepat. Tiga Mutiara ditolak.");
+await saveProgressToCloud(m,selectedAnswer,correct,reward);
+}
+function finishMission(){
+stopDodge();stopVoice();currentMission=null;
+document.getElementById("missionScreen").classList.remove("active");
+document.getElementById("gameScreen").classList.add("active");
+renderWorld();toast("Selamat kembali ke dunia pengembaraan!");
+}
 
 /* PETA DAN MASA */
-function showMap(){showModal(`<h2>🗺️ PETA NEGARA</h2>${areas.map((a,i)=>`<button class="option" onclick="closeModal();travelTo(${i})">${a.emoji} ${a.name} ${areaUnlocked(i)?"🔓":"🔒"}</button>`).join("")}`)}
-function startGame(){showScreen("gameScreen");renderWorld();updateStats();if(!isMaster)startTimer();else document.getElementById("clock").textContent="∞"}
-function startTimer(){clearInterval(timer);timer=setInterval(()=>{if(remainingSeconds>0)remainingSeconds--;document.getElementById("clock").textContent=String(Math.floor(remainingSeconds/60)).padStart(2,"0")+":"+String(remainingSeconds%60).padStart(2,"0");if(remainingSeconds<=0){clearInterval(timer);toast("Masa permainan tamat!")}},1000)}
+function showMap(){
+showModal(`<h2>🗺️ PETA NEGARA</h2>${areas.map((a,i)=>`<button class="option" onclick="closeModal();travelTo(${i})">${a.emoji} ${a.name} ${areaUnlocked(i)?"🔓":"🔒"}</button>`).join("")}`);
+}
+function startGame(){
+showScreen("gameScreen");renderWorld();updateStats();
+if(!isMaster)startTimer();else document.getElementById("clock").textContent="∞";
+}
+function startTimer(){
+clearInterval(timer);
+timer=setInterval(()=>{
+if(remainingSeconds>0)remainingSeconds--;
+document.getElementById("clock").textContent=String(Math.floor(remainingSeconds/60)).padStart(2,"0")+":"+String(remainingSeconds%60).padStart(2,"0");
+if(remainingSeconds<=0){clearInterval(timer);toast("Masa permainan tamat!")}
+},1000);
+}
 function backToIntro(){stopDodge();clearInterval(timer);showScreen("introScreen")}
 
 /* PANEL MASTER */
 function openMasterPanel(){if(!isMaster)return toast("Akses Master sahaja.");showScreen("masterScreen");masterTab("missions")}
-async function masterTab(tab){if(!isMaster)return;let box=document.getElementById("masterContent");box.innerHTML="Memuatkan...";if(tab==="missions"){box.innerHTML="<h3>📚 Lapan Cabaran</h3>"+missions.map((m,i)=>`<div class="adminList"><b>${i+1}. ${escapeHTML(m.title)}</b><p>${gameNames[i]}</p><button onclick="masterReplay('${m.id}')">ULANG MISI</button></div>`).join("")}else if(tab==="players"){let {data,error}=await db.from("profiles").select("*").limit(100);box.innerHTML="<h3>👥 Pemain</h3>"+(error?escapeHTML(error.message):(data||[]).map(p=>`<div class="adminList">${escapeHTML(p.full_name||p.email||p.id)} · ${escapeHTML(p.role||"student")}</div>`).join(""))}else await loadLeaderboard(box)}
-function masterReplay(id){let m=missions.find(x=>x.id===id);if(!m)return;currentArea=m.area;showScreen("gameScreen");renderWorld();startChallenge(m)}
-async function loadLeaderboard(target){target.innerHTML="Memuatkan data...";try{let [pr,pg]=await Promise.all([db.from("profiles").select("*").limit(500),db.from("student_progress").select("*").limit(5000)]);if(pr.error||pg.error){target.innerHTML=escapeHTML(pr.error?.message||pg.error?.message);return}let scores={};(pg.data||[]).forEach(r=>{let id=String(r.user_id);scores[id]=Math.max(scores[id]||0,Number(r.xp)||0)});let students=(pr.data||[]).filter(p=>(p.role||"student").toLowerCase()==="student").map(p=>({name:p.full_name||p.username||p.email||"Murid",score:scores[String(p.id)]||0})).sort((a,b)=>b.score-a.score);target.innerHTML="<h3>🏆 Kedudukan Mutiara Murid</h3><p>Jumlah murid: "+students.length+"</p>"+students.map((p,i)=>`<div class="adminList"><b>${i+1}. ${escapeHTML(p.name)}</b><h2>💎 ${p.score} Mutiara</h2></div>`).join("")}catch(e){target.innerHTML=escapeHTML(e.message)}}
+async function masterTab(tab){
+if(!isMaster)return;
+let box=document.getElementById("masterContent");box.innerHTML="Memuatkan...";
+if(tab==="missions"){
+box.innerHTML="<h3>📚 Lapan Cabaran</h3>"+missions.map((m,i)=>`<div class="adminList"><b>${i+1}. ${escapeHTML(m.title)}</b><p>${gameNames[i]}</p><button onclick="masterReplay('${m.id}')">ULANG MISI</button></div>`).join("");
+}else if(tab==="players"){
+let {data,error}=await db.from("profiles").select("*").limit(100);
+box.innerHTML="<h3>👥 Pemain</h3>"+(error?escapeHTML(error.message):(data||[]).map(p=>`<div class="adminList">${escapeHTML(p.full_name||p.email||p.id)} · ${escapeHTML(p.role||"student")}</div>`).join(""));
+}else await loadLeaderboard(box);
+}
+function masterReplay(id){
+let m=missions.find(x=>x.id===id);if(!m)return;
+currentArea=m.area;showScreen("gameScreen");renderWorld();startChallenge(m);
+}
+async function loadLeaderboard(target){
+target.innerHTML="Memuatkan data...";
+try{
+let [pr,pg]=await Promise.all([db.from("profiles").select("*").limit(500),db.from("student_progress").select("*").limit(5000)]);
+if(pr.error||pg.error){target.innerHTML=escapeHTML(pr.error?.message||pg.error?.message);return}
+let scores={};
+(pg.data||[]).forEach(r=>{let id=String(r.user_id);scores[id]=Math.max(scores[id]||0,Number(r.xp)||0)});
+let students=(pr.data||[]).filter(p=>(p.role||"student").toLowerCase()==="student").map(p=>({name:p.full_name||p.username||p.email||"Murid",score:scores[String(p.id)]||0})).sort((a,b)=>b.score-a.score);
+target.innerHTML="<h3>🏆 Kedudukan Mutiara Murid</h3><p>Jumlah murid: "+students.length+"</p>"+students.map((p,i)=>`<div class="adminList"><b>${i+1}. ${escapeHTML(p.name)}</b><h2>💎 ${p.score} Mutiara</h2></div>`).join("");
+}catch(e){target.innerHTML=escapeHTML(e.message)}
+}
 async function showLeaderboard(){showScreen("leaderScreen");await loadLeaderboard(document.getElementById("leaderList"))}
 
 /* AKAUN */
-async function login(){if(authBusy)return;let email=document.getElementById("email").value.trim(),password=document.getElementById("password").value,msg=document.getElementById("authMessage");if(!email||!password){msg.textContent="Masukkan emel dan kata laluan.";return}authBusy=true;msg.textContent="Sedang log masuk...";try{let {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;user=data.user;await loadUser()}catch(e){msg.textContent="Log masuk gagal: "+e.message}finally{authBusy=false}}
-async function register(){if(authBusy)return;let name=document.getElementById("fullName").value.trim(),email=document.getElementById("email").value.trim(),password=document.getElementById("password").value,msg=document.getElementById("authMessage");if(!name||!email||password.length<6){msg.textContent="Masukkan nama, emel dan kata laluan sekurang-kurangnya 6 aksara.";return}authBusy=true;msg.textContent="Mendaftarkan akaun...";try{let {data,error}=await db.auth.signUp({email,password,options:{data:{full_name:name}}});if(error)throw error;if(data.session&&data.user){user=data.user;await ensureProfile(name);await loadUser()}else msg.textContent="Pendaftaran berjaya. Sila sahkan emel kemudian log masuk."}catch(e){msg.textContent="Pendaftaran gagal: "+e.message}finally{authBusy=false}}
-async function ensureProfile(name=""){if(!user)return false;let {data,error}=await db.from("profiles").select("*").eq("id",user.id).maybeSingle();if(error){document.getElementById("authMessage").textContent=error.message;return false}if(data){profile=data;return true}let {data:created,error:e}=await db.from("profiles").insert({id:user.id,full_name:name||user.user_metadata?.full_name||user.email.split("@")[0],role:"student"}).select("*").single();if(e){document.getElementById("authMessage").textContent=e.message;return false}profile=created;return true}
-async function loadUser(){let ok=await ensureProfile();if(!ok){await db.auth.signOut();user=null;showScreen("authScreen");return}isMaster=String(profile.role||"").toLowerCase()==="master";selectedCharacter=profile.character||"hamster";document.getElementById("masterPanelButton").classList.toggle("hidden",!isMaster);await loadMissions();await loadProgress();updateStats();renderCharacterPicker();document.getElementById("welcomeName").textContent="Selamat datang, "+(profile.full_name||user.email);document.getElementById("hero").innerHTML=heroGraphic();showScreen(profile.character?"introScreen":"characterScreen")}
-async function loadMissions(){try{let {data,error}=await db.from("missions").select("*").order("week").order("day");if(error||!data?.length)return;data.forEach(r=>{let m=missions.find(x=>x.id===r.id);if(!m)return;Object.assign(m,{title:r.title||r.name||m.title,pillar:r.pillar||r.category||m.pillar,question:r.question||m.question,a:r.option_a||r.a||m.a,b:r.option_b||r.b||m.b,c:r.option_c||r.c||m.c,answer:String(r.correct_answer||r.answer||m.answer).toUpperCase()})})}catch(e){console.warn(e)}}
-async function loadProgress(){progress={};balance=0;let {data,error}=await db.from("student_progress").select("*").eq("user_id",user.id);if(!error)(data||[]).forEach(p=>{progress[String(p.mission_id)]={attempted:true,correct:!!p.is_correct};balance=Math.max(balance,Number(p.xp)||0)});try{let local=JSON.parse(localStorage.getItem(localKey())||"{}");balance=Math.max(balance,Number(local.balance)||0);progress={...local.progress,...progress};if(local.selectedCharacter&&!profile.character)selectedCharacter=local.selectedCharacter}catch(e){}}
-function saveLocal(){if(user)localStorage.setItem(localKey(),JSON.stringify({balance,progress,selectedCharacter}))}
-async function saveCharacter(){if(!user)return;let {error}=await db.from("profiles").update({character:selectedCharacter}).eq("id",user.id);if(error)console.warn(error.message)}
-async function saveProgressToCloud(m,answer,correct,reward){if(!user)return;let {error}=await db.rpc("submit_mission_answer",{p_mission_id:m.id,p_answer:answer});if(error){console.warn(error.message);toast("Semakan simpanan Supabase diperlukan.")}}
-async function logout(){stopDodge();clearInterval(timer);stopVoice();if(user)await db.auth.signOut();user=null;profile=null;isMaster=false;progress={};balance=0;document.getElementById("email").value="";document.getElementById("password").value="";document.getElementById("fullName").value="";document.getElementById("modal").style.display="none";showScreen("authScreen")}
+async function login(){
+if(authBusy)return;
+let email=document.getElementById("email").value.trim(),password=document.getElementById("password").value,msg=document.getElementById("authMessage");
+if(!email||!password){msg.textContent="Masukkan emel dan kata laluan.";return}
+authBusy=true;msg.textContent="Sedang log masuk...";
+try{let {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;user=data.user;await loadUser()}
+catch(e){msg.textContent="Log masuk gagal: "+e.message}
+finally{authBusy=false}
+}
+async function register(){
+if(authBusy)return;
+let name=document.getElementById("fullName").value.trim(),email=document.getElementById("email").value.trim(),password=document.getElementById("password").value,msg=document.getElementById("authMessage");
+if(!name||!email||password.length<6){msg.textContent="Masukkan nama, emel dan kata laluan sekurang-kurangnya 6 aksara.";return}
+authBusy=true;msg.textContent="Mendaftarkan akaun...";
+try{
+let {data,error}=await db.auth.signUp({email,password,options:{data:{full_name:name}}});
+if(error)throw error;
+if(data.session&&data.user){user=data.user;await ensureProfile(name);await loadUser()}
+else msg.textContent="Pendaftaran berjaya. Sila sahkan emel kemudian log masuk.";
+}catch(e){msg.textContent="Pendaftaran gagal: "+e.message}
+finally{authBusy=false}
+}
+async function ensureProfile(name=""){
+if(!user)return false;
+let {data,error}=await db.from("profiles").select("*").eq("id",user.id).maybeSingle();
+if(error){document.getElementById("authMessage").textContent=error.message;return false}
+if(data){profile=data;return true}
+let {data:created,error:e}=await db.from("profiles").insert({id:user.id,full_name:name||user.user_metadata?.full_name||user.email.split("@")[0],role:"student"}).select("*").single();
+if(e){document.getElementById("authMessage").textContent=e.message;return false}
+profile=created;return true;
+}
+async function loadUser(){
+let ok=await ensureProfile();
+if(!ok){await db.auth.signOut();user=null;showScreen("authScreen");return}
+isMaster=String(profile.role||"").toLowerCase()==="master";
+selectedCharacter=profile.character||"hamster";
+document.getElementById("masterPanelButton").classList.toggle("hidden",!isMaster);
+await loadMissions();await loadProgress();updateStats();renderCharacterPicker();
+document.getElementById("welcomeName").textContent="Selamat datang, "+(profile.full_name||user.email);
+document.getElementById("hero").innerHTML=heroGraphic();
+showScreen(profile.character?"introScreen":"characterScreen");
+}
+async function loadMissions(){
+try{
+let {data,error}=await db.from("missions").select("*").order("week").order("day");
+if(error||!data?.length)return;
+data.forEach(r=>{
+let m=missions.find(x=>x.id===r.id);if(!m)return;
+Object.assign(m,{
+title:r.title||r.name||m.title,pillar:r.pillar||r.category||m.pillar,
+question:r.question||m.question,a:r.option_a||r.a||m.a,b:r.option_b||r.b||m.b,
+c:r.option_c||r.c||m.c,answer:String(r.correct_answer||r.answer||m.answer).toUpperCase()
+});
+});
+}catch(e){console.warn(e)}
+}
+async function loadProgress(){
+progress={};balance=0;
+let {data,error}=await db.from("student_progress").select("*").eq("user_id",user.id);
+if(!error)(data||[]).forEach(p=>{
+progress[String(p.mission_id)]={attempted:true,correct:!!p.is_correct};
+balance=Math.max(balance,Number(p.xp)||0);
+});
+try{
+let local=JSON.parse(localStorage.getItem(localKey())||"{}");
+balance=Math.max(balance,Number(local.balance)||0);
+progress={...local.progress,...progress};
+if(local.selectedCharacter&&!profile.character)selectedCharacter=local.selectedCharacter;
+}catch(e){}
+}
+function saveLocal(){
+if(user)localStorage.setItem(localKey(),JSON.stringify({balance,progress,selectedCharacter}));
+}
+async function saveCharacter(){
+if(!user)return;
+let {error}=await db.from("profiles").update({character:selectedCharacter}).eq("id",user.id);
+if(error)console.warn(error.message);
+}
+async function saveProgressToCloud(m,answer,correct,reward){
+if(!user)return;
+let {error}=await db.rpc("submit_mission_answer",{p_mission_id:m.id,p_answer:answer});
+if(error){console.warn(error.message);toast("Semakan simpanan Supabase diperlukan.")}
+}
+async function logout(){
+stopDodge();clearInterval(timer);stopVoice();
+if(user)await db.auth.signOut();
+user=null;profile=null;isMaster=false;progress={};balance=0;
+document.getElementById("email").value="";
+document.getElementById("password").value="";
+document.getElementById("fullName").value="";
+document.getElementById("modal").style.display="none";
+document.getElementById("missionScreen").classList.remove("active");
+showScreen("authScreen");
+}
 
 /* MULA */
-renderCharacterPicker();document.getElementById("hero").innerHTML=heroGraphic();renderAreas();updateStats();
-(async()=>{try{let {data}=await db.auth.getSession();if(data.session?.user){user=data.session.user;await loadUser()}}catch(e){console.error(e)}})();
-db.auth.onAuthStateChange((event,session)=>{if(event==="SIGNED_OUT"){user=null;profile=null;isMaster=false;clearInterval(timer);stopDodge();showScreen("authScreen")}});
+renderCharacterPicker();
+document.getElementById("hero").innerHTML=heroGraphic();
+renderAreas();updateStats();
+(async()=>{
+try{let {data}=await db.auth.getSession();if(data.session?.user){user=data.session.user;await loadUser()}}
+catch(e){console.error(e)}
+})();
+db.auth.onAuthStateChange((event,session)=>{
+if(event==="SIGNED_OUT"){
+user=null;profile=null;isMaster=false;clearInterval(timer);stopDodge();showScreen("authScreen");
+}
+});
 </script>
 </body>
 </html>
